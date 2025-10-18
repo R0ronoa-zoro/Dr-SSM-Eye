@@ -412,9 +412,8 @@ class ReasoningEngine:
             Tuple of (adjusted_score, context_note)
         """
         context_note = ""
-        adjusted_score = risk_score
+        adjusted_score = risk_score if risk_score is not None else 0
         
-        # Rule 1: Payment Integration Detection
         brand_result = self._find_module_result(module_results, "brand_check")
         whois_result = self._find_module_result(module_results, "whois")
         
@@ -423,21 +422,24 @@ class ReasoningEngine:
             favicon_match = brand_result.features.get("evidence", {}).get("favicon_match", False)
             domain_age = whois_result.features.get("domain_age_days", 0)
             
-            # Logo present but favicon doesn't match + old domain = payment integration
+            if domain_age is None:
+                domain_age = 0
+            
             if logo_detected and not favicon_match and domain_age > 365:
                 adjusted_score -= 60
                 context_note = "Likely legitimate use of brand for payment integration"
         
-        # Rule 2: Whitelisted with Suspicious Features
         whitelist_result = self._find_module_result(module_results, "whitelist")
         if whitelist_result and whitelist_result.features.get("tier") == "top_10k":
             if adjusted_score > 20:
                 adjusted_score = 20
                 context_note = "Well-known domain, capping suspicious score"
         
-        # Rule 3: New Site with Legitimate Indicators
         if whois_result:
             domain_age = whois_result.features.get("domain_age_days", 999)
+            if domain_age is None:
+                domain_age = 999
+                
             dns_result = self._find_module_result(module_results, "dns")
             ssl_result = self._find_module_result(module_results, "ssl")
             threat_result = self._find_module_result(module_results, "threat_intel")
@@ -451,7 +453,6 @@ class ReasoningEngine:
                 context_note = "New domain but shows legitimate business indicators"
         
         return adjusted_score, context_note
-
 
 def generate_recommendation(classification: str, confidence: float, risk_score: int) -> str:
     """
