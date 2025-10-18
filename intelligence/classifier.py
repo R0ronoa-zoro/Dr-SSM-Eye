@@ -156,7 +156,10 @@ class Classifier:
         
         for result in module_results:
             if result and result.risk_contribution is not None:
-                score += result.risk_contribution
+                try:
+                    score += int(result.risk_contribution)
+                except (TypeError, ValueError):
+                    continue
         
         score = max(-100, min(200, score))
         
@@ -175,6 +178,8 @@ class Classifier:
         """
         if confidence < 0.60:
             return "ANALYST_REQUIRED"
+        
+        risk_score = risk_score if risk_score is not None else 0
         
         if risk_score < -20:
             return "CLEAN"
@@ -266,6 +271,8 @@ class Classifier:
                     return ml_class, confidence
         
         rule_class = self.classify_by_score(risk_score, 0.8)
+        
+        risk_score = risk_score if risk_score is not None else 0
         
         if risk_score < -50:
             confidence = 0.95
