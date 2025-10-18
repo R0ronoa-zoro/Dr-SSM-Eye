@@ -75,11 +75,12 @@ class PDFGenerator:
             story.append(Spacer(1, 0.3*inch))
             
             classification = scan_data.get('classification', 'UNKNOWN')
-            confidence = scan_data.get('confidence', 0)
+            confidence = scan_data.get('confidence', 0) * 100
             risk_score = scan_data.get('risk_score', 0)
             url = scan_data.get('url', 'N/A')
             timestamp = scan_data.get('last_scanned', datetime.now())
             
+            story.append(Paragraph("<b>Executive Summary</b>", self.styles['CustomHeading']))
             story.append(Paragraph(f"<b>URL:</b> {url}", self.styles['CustomBody']))
             story.append(Paragraph(f"<b>Classification:</b> {classification}", self.styles['CustomBody']))
             story.append(Paragraph(f"<b>Confidence:</b> {confidence:.1f}%", self.styles['CustomBody']))
@@ -87,7 +88,95 @@ class PDFGenerator:
             story.append(Paragraph(f"<b>Scanned:</b> {timestamp}", self.styles['CustomBody']))
             story.append(Spacer(1, 0.3*inch))
             
-            story.append(Paragraph("Analysis", self.styles['CustomHeading']))
+            features = scan_data.get('features', {})
+            
+            story.append(Paragraph("<b>URL Information</b>", self.styles['CustomHeading']))
+            story.append(Paragraph(f"<b>Source URL:</b> {url}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Normalized URL:</b> {scan_data.get('normalized_url', url)}", self.styles['CustomBody']))
+            
+            redirect_chain = features.get('redirect_chain', [])
+            if redirect_chain:
+                dest_url = redirect_chain[-1].get('url', url)
+                story.append(Paragraph(f"<b>Destination URL:</b> {dest_url}", self.styles['CustomBody']))
+                story.append(Paragraph(f"<b>Redirect Hops:</b> {len(redirect_chain)}", self.styles['CustomBody']))
+            
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>Brand Detection</b>", self.styles['CustomHeading']))
+            brand_detected = features.get('brand_check_brand_detected', 'None')
+            is_official = features.get('brand_check_is_official_domain', False)
+            story.append(Paragraph(f"<b>Brand Detected:</b> {brand_detected}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Official Domain:</b> {'Yes' if is_official else 'No'}", self.styles['CustomBody']))
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>Network Information</b>", self.styles['CustomHeading']))
+            ip_address = features.get('ip_reputation_ip', 'N/A')
+            asn = features.get('ip_reputation_asn', 'N/A')
+            asn_name = features.get('ip_reputation_asn_name', 'N/A')
+            country = features.get('ip_reputation_country', 'N/A')
+            story.append(Paragraph(f"<b>IP Address:</b> {ip_address}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>ASN:</b> {asn} ({asn_name})", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Country:</b> {country}", self.styles['CustomBody']))
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>Domain Information</b>", self.styles['CustomHeading']))
+            domain_age = features.get('whois_domain_age_days', 'Unknown')
+            registrar = features.get('whois_registrar', 'N/A')
+            reg_date = features.get('whois_registration_date', 'N/A')
+            exp_date = features.get('whois_expiry_date', 'N/A')
+            story.append(Paragraph(f"<b>Domain Age:</b> {domain_age} days" if domain_age != 'Unknown' else f"<b>Domain Age:</b> Unknown", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Registrar:</b> {registrar}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Registration Date:</b> {reg_date}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Expiry Date:</b> {exp_date}", self.styles['CustomBody']))
+            
+            mx_records = features.get('dns_check_mx_records', [])
+            if mx_records:
+                story.append(Paragraph(f"<b>MX Records:</b> {', '.join(mx_records)}", self.styles['CustomBody']))
+            else:
+                story.append(Paragraph(f"<b>MX Records:</b> None", self.styles['CustomBody']))
+            
+            nameservers = features.get('dns_check_nameservers', [])
+            if nameservers:
+                story.append(Paragraph(f"<b>Nameservers:</b> {', '.join(nameservers[:3])}", self.styles['CustomBody']))
+            
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>SSL Certificate</b>", self.styles['CustomHeading']))
+            has_https = features.get('ssl_has_https', False)
+            ssl_issuer = features.get('ssl_issuer', 'N/A')
+            ssl_valid_from = features.get('ssl_valid_from', 'N/A')
+            ssl_valid_to = features.get('ssl_valid_to', 'N/A')
+            story.append(Paragraph(f"<b>Has HTTPS:</b> {'Yes' if has_https else 'No'}", self.styles['CustomBody']))
+            if has_https:
+                story.append(Paragraph(f"<b>Issuer:</b> {ssl_issuer}", self.styles['CustomBody']))
+                story.append(Paragraph(f"<b>Valid From:</b> {ssl_valid_from}", self.styles['CustomBody']))
+                story.append(Paragraph(f"<b>Valid To:</b> {ssl_valid_to}", self.styles['CustomBody']))
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>Content Analysis</b>", self.styles['CustomHeading']))
+            page_title = features.get('content_page_title', 'N/A')
+            has_password = features.get('content_has_password_field', False)
+            suspicious_kw = features.get('content_suspicious_keywords', [])
+            story.append(Paragraph(f"<b>Page Title:</b> {page_title}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>Has Password Field:</b> {'Yes' if has_password else 'No'}", self.styles['CustomBody']))
+            if suspicious_kw:
+                story.append(Paragraph(f"<b>Suspicious Keywords:</b> {', '.join(suspicious_kw)}", self.styles['CustomBody']))
+            story.append(Spacer(1, 0.2*inch))
+            
+            story.append(Paragraph("<b>Threat Intelligence</b>", self.styles['CustomHeading']))
+            in_threat_db = features.get('threat_intel_threat_found', False)
+            threat_sources = features.get('threat_intel_sources', [])
+            in_whitelist = features.get('whitelist_check_in_whitelist', False)
+            tranco_rank = features.get('whitelist_check_tranco_rank')
+            story.append(Paragraph(f"<b>In Threat Database:</b> {'Yes' if in_threat_db else 'No'}", self.styles['CustomBody']))
+            if threat_sources:
+                story.append(Paragraph(f"<b>Threat Sources:</b> {', '.join(threat_sources)}", self.styles['CustomBody']))
+            story.append(Paragraph(f"<b>In Whitelist:</b> {'Yes' if in_whitelist else 'No'}", self.styles['CustomBody']))
+            if tranco_rank:
+                story.append(Paragraph(f"<b>Tranco Rank:</b> {tranco_rank}", self.styles['CustomBody']))
+            story.append(Spacer(1, 0.3*inch))
+            
+            story.append(Paragraph("<b>Analysis</b>", self.styles['CustomHeading']))
             
             reasoning = scan_data.get('reasoning', [])
             if reasoning:
@@ -102,20 +191,13 @@ class PDFGenerator:
                 story.append(Paragraph("No specific indicators found.", self.styles['CustomBody']))
             
             story.append(Spacer(1, 0.3*inch))
-            story.append(Paragraph("Technical Details", self.styles['CustomHeading']))
             
-            features = scan_data.get('features', {})
-            if features:
-                ip_address = features.get('ip_reputation_ip', 'N/A')
-                domain_age = features.get('whois_domain_age_days', 'N/A')
-                has_https = features.get('ssl_has_https', False)
-                
-                story.append(Paragraph(f"<b>IP Address:</b> {ip_address}", self.styles['CustomBody']))
-                story.append(Paragraph(f"<b>Domain Age:</b> {domain_age} days", self.styles['CustomBody']))
-                story.append(Paragraph(f"<b>HTTPS:</b> {'Yes' if has_https else 'No'}", self.styles['CustomBody']))
+            recommendation = self._get_recommendation(classification, confidence)
+            story.append(Paragraph(f"<b>Recommendation:</b> {recommendation}", self.styles['CustomBody']))
             
             story.append(Spacer(1, 0.5*inch))
             story.append(Paragraph("Generated by Dr. SSM Eye", self.styles['CustomBody']))
+            story.append(Paragraph(f"Report Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", self.styles['CustomBody']))
             
             doc.build(story)
             
@@ -128,6 +210,21 @@ class PDFGenerator:
         except Exception as e:
             logger.error(f"PDF generation error: {e}")
             raise
+    
+    def _get_recommendation(self, classification: str, confidence: float) -> str:
+        """Get recommendation based on classification"""
+        if classification == "CLEAN":
+            if confidence > 90:
+                return "Safe to proceed - URL appears legitimate"
+            else:
+                return "Likely safe, but verify sender if received via email"
+        elif classification == "SUSPICIOUS":
+            return "Exercise caution - Do not enter sensitive information without verification"
+        elif classification == "MALICIOUS":
+            return "DO NOT VISIT - High confidence phishing/malicious site"
+        elif classification == "ANALYST_REQUIRED":
+            return "Manual review recommended - Mixed signals detected"
+        return "Unknown classification"
     
     def generate_batch_summary_report(self, scan_results: List[Dict[str, Any]]) -> bytes:
         """
