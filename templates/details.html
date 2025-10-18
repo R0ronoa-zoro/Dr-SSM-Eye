@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Details - Dr. SSM Eye</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .classification-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .clean { background: #d4edda; color: #155724; }
+        .suspicious { background: #fff3cd; color: #856404; }
+        .malicious { background: #f8d7da; color: #721c24; }
+        .analyst { background: #d1ecf1; color: #0c5460; }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .info-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .screenshot-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .screenshot-img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .reasoning-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .reasoning-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .reasoning-item.negative {
+            background: #fff5f5;
+            border-color: #e53e3e;
+        }
+        
+        .reasoning-item.positive {
+            background: #f0fff4;
+            border-color: #38a169;
+        }
+        
+        .redirect-chain {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .redirect-hop {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-left: 3px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .action-buttons {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .url-display {
+            word-break: break-all;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dr. SSM Eye - Scan Details</h1>
+        <p>Detailed Analysis Report</p>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="classification-badge {{ scan.classification|lower }}">
+                {{ scan.classification }}
+            </div>
+            
+            <div class="url-display">{{ scan.url }}</div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Confidence</div>
+                    <div class="info-value">{{ "%.0f"|format(scan.confidence) }}%</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Risk Score</div>
+                    <div class="info-value">{{ scan.risk_score }}/200</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Scanned</div>
+                    <div class="info-value">{{ scan.last_scanned }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Scan Duration</div>
+                    <div class="info-value">{{ "%.2f"|format(scan.scan_duration_ms / 1000) }}s</div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/download-report/{{ scan.normalized_url }}" class="btn">Download PDF Report</a>
+                <a href="/" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Screenshot</h2>
+            <div class="screenshot-section">
+                {% if scan.screenshot_status == 'ready' and scan.full_screenshot_path %}
+                    <img src="/screenshot/{{ scan.full_screenshot_path }}" class="screenshot-img" alt="Website Screenshot">
+                {% elif scan.screenshot_status == 'pending' %}
+                    <p>Screenshot capture in progress...</p>
+                {% else %}
+                    <p>Screenshot not available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Analysis</h2>
+            
+            {% if scan.reasoning %}
+                <ul class="reasoning-list">
+                    {% for reason in scan.reasoning %}
+                        <li class="reasoning-item {{ reason.impact }}">
+                            {{ reason.description }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No specific indicators found. Classification based on baseline analysis.</p>
+            {% endif %}
+        </div>
+        
+        {% if scan.features and scan.features.redirect_chain %}
+        <div class="card">
+            <h2>Redirect Chain</h2>
+            <div class="redirect-chain">
+                {% for hop in scan.features.redirect_chain %}
+                    <div class="redirect-hop">
+                        <strong>Hop {{ hop.hop_number }}:</strong> {{ hop.url }}
+                        <br>
+                        <small>Status: {{ hop.status_code }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="card">
+            <h2>Technical Details</h2>
+            
+            <div class="info-grid">
+                {% if scan.ip_address %}
+                <div class="info-item">
+                    <div class="info-label">IP Address</div>
+                    <div class="info-value">{{ scan.ip_address }}</div>
+                </div>
+                {% endif %}
+                
+                {% if scan.domain_age_days %}
+                <div class="info-item">
+                    <div class="info-label">Domain Age</div>
+                    <div class="info-value">{{ scan.domain_age_days }} days</div>
+                </div>
+                {% endif %}
+                
+                {% if scan.brand_detected %}
+                <div class="info-item">
+                    <div class="info-label">Brand Detected</div>
+                    <div class="info-value">{{ scan.brand_detected }}</div>
+                </div>
+                {% endif %}
+                
+                {% if scan.features %}
+                    {% if scan.features.get('ssl_has_https') is not none %}
+                    <div class="info-item">
+                        <div class="info-label">HTTPS</div>
+                        <div class="info-value">{{ "Yes" if scan.features.get('ssl_has_https') else "No" }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if scan.features.get('threat_intel_threat_found') is not none %}
+                    <div class="info-item">
+                        <div class="info-label">In Threat Database</div>
+                        <div class="info-value">{{ "Yes" if scan.features.get('threat_intel_threat_found') else "No" }}</div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

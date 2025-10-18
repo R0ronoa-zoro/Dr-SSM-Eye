@@ -1,0 +1,758 @@
+2025-10-17 10:58:30 - dr_ssm_eye - INFO - Setting up database...
+2025-10-17 10:58:30 - dr_ssm_eye - INFO - Initializing database...
+2025-10-17 10:58:30 - dr_ssm_eye - INFO - Database created successfully at: D:\Dr SSM Eye\New Project\storage\scan_history.db
+2025-10-17 10:58:30 - dr_ssm_eye - INFO - Database tables created:
+2025-10-17 10:58:30 - dr_ssm_eye - INFO -   - url_scans
+2025-10-17 10:58:30 - dr_ssm_eye - INFO -   - malicious_ips
+2025-10-17 10:58:30 - dr_ssm_eye - INFO -   - screenshot_metadata
+2025-10-17 10:58:30 - dr_ssm_eye - INFO -   - analyst_reviews
+2025-10-17 10:58:42 - dr_ssm_eye - INFO - Setting up database...
+2025-10-17 10:58:42 - dr_ssm_eye - INFO - Initializing database...
+2025-10-17 10:58:42 - dr_ssm_eye - INFO - Database created successfully at: D:\Dr SSM Eye\New Project\storage\scan_history.db
+2025-10-17 10:58:42 - dr_ssm_eye - INFO - Database tables created:
+2025-10-17 10:58:42 - dr_ssm_eye - INFO -   - url_scans
+2025-10-17 10:58:42 - dr_ssm_eye - INFO -   - malicious_ips
+2025-10-17 10:58:42 - dr_ssm_eye - INFO -   - screenshot_metadata
+2025-10-17 10:58:42 - dr_ssm_eye - INFO -   - analyst_reviews
+2025-10-17 10:59:40 - dr_ssm_eye - INFO - Updating threat feeds...
+2025-10-17 10:59:40 - dr_ssm_eye - INFO - Starting threat feed update...
+2025-10-17 10:59:40 - dr_ssm_eye - INFO - Updating PhishTank feed...
+2025-10-17 10:59:44 - dr_ssm_eye - ERROR - PhishTank download failed: 404
+2025-10-17 10:59:44 - dr_ssm_eye - INFO - Updating URLhaus feed...
+2025-10-17 11:51:08 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 11:51:08 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 11:51:08 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 11:51:09 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 11:51:09 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 11:51:09 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 11:54:28 - dr_ssm_eye - INFO - Scanning URL: https://google.com
+2025-10-17 11:54:28 - dr_ssm_eye - WARNING - Tranco list not found at D:\Dr SSM Eye\New Project\data\tranco_top_1m.csv
+2025-10-17 11:54:28 - dr_ssm_eye - INFO - Loaded threat caches - PhishTank: 0, URLhaus: 0, OpenPhish: 0
+2025-10-17 11:54:32 - dr_ssm_eye - ERROR - WHOIS check error for https://google.com: can't subtract offset-naive and offset-aware datetimes
+2025-10-17 11:54:48 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 11:55:11 - dr_ssm_eye - WARNING - Screenshot timeout for https://google.com
+2025-10-17 11:55:12 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 11:55:12 - dr_ssm_eye - INFO - Scan complete: https://google.com - SUSPICIOUS (64%)
+2025-10-17 11:55:12 - dr_ssm_eye - INFO - Scanning URL: http://tiqfsagwiq.duckdns.org/en
+2025-10-17 11:55:23 - dr_ssm_eye - WARNING - SSL check timeout for tiqfsagwiq.duckdns.org
+2025-10-17 11:55:27 - dr_ssm_eye - ERROR - Scan error for http://tiqfsagwiq.duckdns.org/en/: argument of type 'NoneType' is not iterable
+2025-10-17 11:55:27 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 11:55:45 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 11:55:53 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-17 11:55:53 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - ANALYST_REQUIRED (54%)
+2025-10-17 11:55:53 - dr_ssm_eye - INFO - Scanning URL: https://amazan.com
+2025-10-17 11:55:56 - dr_ssm_eye - ERROR - WHOIS check error for https://amazan.com: can't subtract offset-naive and offset-aware datetimes
+2025-10-17 11:56:13 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 11:56:24 - dr_ssm_eye - WARNING - Screenshot timeout for https://amazan.com
+2025-10-17 11:56:24 - dr_ssm_eye - INFO - Screenshot captured for https://amazan.com
+2025-10-17 11:56:24 - dr_ssm_eye - INFO - Scan complete: https://amazan.com - MALICIOUS (64%)
+2025-10-17 16:28:35 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 16:28:35 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 16:28:35 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 16:28:37 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 16:28:37 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 16:28:37 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 16:30:30 - dr_ssm_eye - INFO - Scanning URL: http://180.191.21.40
+2025-10-17 16:30:30 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 16:30:31 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 16:30:40 - dr_ssm_eye - WARNING - SSL check timeout for 180.191.21.40
+2025-10-17 16:30:40 - dr_ssm_eye - WARNING - Content check timeout for http://180.191.21.40
+2025-10-17 16:30:41 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: HTTPConnectionPool(host='180.191.21.40', port=80): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x000001CCFF2F3ED0>, 'Connection to 180.191.21.40 timed out. (connect timeout=10)'))
+2025-10-17 16:30:52 - dr_ssm_eye - ERROR - Scan error for http://180.191.21.40: argument of type 'NoneType' is not iterable
+2025-10-17 16:30:52 - dr_ssm_eye - INFO - Scanning URL: https://google.com
+2025-10-17 16:31:11 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 16:31:33 - dr_ssm_eye - WARNING - Screenshot timeout for https://google.com
+2025-10-17 16:31:35 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 16:31:35 - dr_ssm_eye - INFO - Scan complete: https://google.com - CLEAN (69%)
+2025-10-17 16:31:35 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 16:31:53 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 16:32:01 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-17 16:32:01 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - ANALYST_REQUIRED (59%)
+2025-10-17 17:13:36 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:13:36 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:13:37 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:20 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:20 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:15:20 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:15:22 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:22 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:15:22 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:18:47 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:47 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:18:47 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:18:48 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:48 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:18:48 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:22:29 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:29 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:22:29 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:22:31 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:31 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Flask app created successfully
+2025-10-17 17:22:31 - dr_ssm_eye - INFO - Starting Dr. SSM Eye on 127.0.0.1:5000
+2025-10-17 17:23:39 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:39 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:39 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:39 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:39 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:39 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:39 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:23:46 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:46 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:46 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:23:50 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:50 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:23:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:23:50 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:27:22 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:27:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:22 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:27:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:22 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:27:25 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:27:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:25 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:27:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:27:25 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:28:30 - dr_ssm_eye - INFO - Scanning URL: google.com
+2025-10-17 17:28:30 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 17:28:30 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 17:28:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:28:45 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.206: [WinError 2] The system cannot find the file specified
+2025-10-17 17:28:46 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 17:29:00 - dr_ssm_eye - WARNING - Screenshot timeout for https://google.com
+2025-10-17 17:29:02 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:29:02 - dr_ssm_eye - INFO - Saved scan for google.com
+2025-10-17 17:29:02 - dr_ssm_eye - INFO - Scan complete: google.com - CLEAN (95%)
+2025-10-17 17:29:02 - dr_ssm_eye - INFO - Scanning URL: http://180.191.21.40
+2025-10-17 17:29:13 - dr_ssm_eye - WARNING - SSL check timeout for 180.191.21.40
+2025-10-17 17:29:21 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:29:21 - dr_ssm_eye - WARNING - ASN lookup failed for 180.191.21.40: [WinError 2] The system cannot find the file specified
+2025-10-17 17:29:31 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 17:29:41 - dr_ssm_eye - WARNING - Content check timeout for http://180.191.21.40
+2025-10-17 17:29:52 - dr_ssm_eye - WARNING - Screenshot timeout for http://180.191.21.40
+2025-10-17 17:30:03 - dr_ssm_eye - ERROR - Screenshot capture error for http://180.191.21.40: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "http://180.191.21.40/", waiting until "domcontentloaded"
+
+2025-10-17 17:30:03 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:30:03 - dr_ssm_eye - INFO - Saved scan for http://180.191.21.40
+2025-10-17 17:30:03 - dr_ssm_eye - INFO - Scan complete: http://180.191.21.40 - MALICIOUS (85%)
+2025-10-17 17:30:03 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 17:30:18 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:30:18 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-17 17:30:29 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:30:29 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 17:30:29 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-17 17:33:44 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:33:44 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:44 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:44 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:44 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:33:44 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:44 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:33:47 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:33:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:47 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:33:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:33:47 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:33:58 - dr_ssm_eye - INFO - Scanning URL: google.com
+2025-10-17 17:33:58 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 17:34:00 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 17:34:13 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:34:13 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.206: [WinError 2] The system cannot find the file specified
+2025-10-17 17:34:15 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 17:34:28 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:34:29 - dr_ssm_eye - INFO - Saved scan for google.com
+2025-10-17 17:34:29 - dr_ssm_eye - INFO - Scan complete: google.com - CLEAN (95%)
+2025-10-17 17:34:29 - dr_ssm_eye - INFO - Scanning URL: http://180.191.21.40
+2025-10-17 17:34:39 - dr_ssm_eye - WARNING - SSL check timeout for 180.191.21.40
+2025-10-17 17:34:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:34:48 - dr_ssm_eye - WARNING - ASN lookup failed for 180.191.21.40: [WinError 2] The system cannot find the file specified
+2025-10-17 17:34:58 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 17:35:08 - dr_ssm_eye - WARNING - Content check timeout for http://180.191.21.40
+2025-10-17 17:35:20 - dr_ssm_eye - WARNING - Screenshot timeout for http://180.191.21.40
+2025-10-17 17:35:30 - dr_ssm_eye - ERROR - Screenshot capture error for http://180.191.21.40: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "http://180.191.21.40/", waiting until "domcontentloaded"
+
+2025-10-17 17:35:30 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:35:30 - dr_ssm_eye - INFO - Saved scan for http://180.191.21.40
+2025-10-17 17:35:30 - dr_ssm_eye - INFO - Scan complete: http://180.191.21.40 - MALICIOUS (85%)
+2025-10-17 17:35:30 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 17:35:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:35:46 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-17 17:35:57 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:35:57 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 17:35:57 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-17 17:39:28 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:39:28 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:39:28 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:39:28 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:39:28 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:39:28 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:39:28 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:40:24 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:40:24 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:40:24 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:40:24 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:40:24 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:40:24 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:40:24 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:44:32 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:44:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:32 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:44:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:32 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:44:35 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:44:35 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:35 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:35 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:35 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 17:44:35 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:44:35 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 17:44:55 - dr_ssm_eye - INFO - Scanning URL: google.com
+2025-10-17 17:44:55 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 17:44:57 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 17:45:10 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:45:10 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.206: [WinError 2] The system cannot find the file specified
+2025-10-17 17:45:11 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 17:45:27 - dr_ssm_eye - WARNING - Screenshot timeout for https://google.com
+2025-10-17 17:45:28 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:45:29 - dr_ssm_eye - INFO - Saved scan for google.com
+2025-10-17 17:45:29 - dr_ssm_eye - INFO - Scan complete: google.com - CLEAN (95%)
+2025-10-17 17:45:29 - dr_ssm_eye - INFO - Scanning URL: http://180.191.21.40
+2025-10-17 17:45:39 - dr_ssm_eye - WARNING - SSL check timeout for 180.191.21.40
+2025-10-17 17:45:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:45:47 - dr_ssm_eye - WARNING - ASN lookup failed for 180.191.21.40: [WinError 2] The system cannot find the file specified
+2025-10-17 17:45:57 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 17:46:07 - dr_ssm_eye - WARNING - Content check timeout for http://180.191.21.40
+2025-10-17 17:46:18 - dr_ssm_eye - WARNING - Screenshot timeout for http://180.191.21.40
+2025-10-17 17:46:29 - dr_ssm_eye - ERROR - Screenshot capture error for http://180.191.21.40: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "http://180.191.21.40/", waiting until "domcontentloaded"
+
+2025-10-17 17:46:29 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:46:29 - dr_ssm_eye - INFO - Saved scan for http://180.191.21.40
+2025-10-17 17:46:29 - dr_ssm_eye - INFO - Scan complete: http://180.191.21.40 - MALICIOUS (85%)
+2025-10-17 17:46:29 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 17:46:44 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 17:46:44 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-17 17:46:55 - dr_ssm_eye - ERROR - Screenshot capture failed: 'tuple' object has no attribute 'get'
+2025-10-17 17:46:55 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 17:46:55 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-17 18:01:42 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:01:42 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:42 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:42 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:42 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:01:42 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:42 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 18:01:45 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:01:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:45 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:01:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:01:45 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 18:02:07 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-17 18:02:07 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 18:02:09 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 18:02:22 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:02:22 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.206: [WinError 2] The system cannot find the file specified
+2025-10-17 18:02:23 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 18:02:37 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 18:02:37 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-17 18:02:37 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (95%)
+2025-10-17 18:02:37 - dr_ssm_eye - INFO - Scanning URL: www.amazan.com
+2025-10-17 18:02:38 - dr_ssm_eye - WARNING - SSL error for amazan.com: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1032)
+2025-10-17 18:02:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:02:52 - dr_ssm_eye - WARNING - ASN lookup failed for 172.237.146.8: [WinError 2] The system cannot find the file specified
+2025-10-17 18:02:57 - dr_ssm_eye - ERROR - Screenshot capture error for https://amazan.com: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://amazan.com/
+Call log:
+  - navigating to "https://amazan.com/", waiting until "domcontentloaded"
+
+2025-10-17 18:02:57 - dr_ssm_eye - INFO - Saved scan for www.amazan.com
+2025-10-17 18:02:57 - dr_ssm_eye - INFO - Scan complete: www.amazan.com - SUSPICIOUS (85%)
+2025-10-17 18:02:57 - dr_ssm_eye - INFO - Scanning URL: 10.10.10.10
+2025-10-17 18:03:07 - dr_ssm_eye - WARNING - SSL check timeout for 10.10.10.10
+2025-10-17 18:03:24 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 18:03:34 - dr_ssm_eye - WARNING - Content check timeout for https://10.10.10.10
+2025-10-17 18:03:45 - dr_ssm_eye - ERROR - Screenshot capture error for https://10.10.10.10: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://10.10.10.10/", waiting until "domcontentloaded"
+
+2025-10-17 18:03:45 - dr_ssm_eye - INFO - Saved scan for 10.10.10.10
+2025-10-17 18:03:45 - dr_ssm_eye - INFO - Scan complete: 10.10.10.10 - SUSPICIOUS (70%)
+2025-10-17 18:03:45 - dr_ssm_eye - ERROR - Screenshot serve error: [WinError 3] The system cannot find the path specified: 'D:\\Dr SSM Eye\\New Project\\ui\\storage\\screenshots\\full/99999ebcfdb78df0.png'
+2025-10-17 18:06:31 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:06:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:06:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:06:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:06:31 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:06:31 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:06:31 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 18:07:22 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-17 18:07:22 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 18:07:24 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 18:07:37 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:07:37 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.174: [WinError 2] The system cannot find the file specified
+2025-10-17 18:07:38 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 18:07:48 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 18:07:48 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-17 18:07:48 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (95%)
+2025-10-17 18:07:48 - dr_ssm_eye - INFO - Scanning URL: www.amazan.com
+2025-10-17 18:07:49 - dr_ssm_eye - WARNING - SSL error for amazan.com: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1032)
+2025-10-17 18:08:03 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:08:03 - dr_ssm_eye - WARNING - ASN lookup failed for 172.237.146.8: [WinError 2] The system cannot find the file specified
+2025-10-17 18:08:09 - dr_ssm_eye - ERROR - Screenshot capture error for https://amazan.com: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://amazan.com/
+Call log:
+  - navigating to "https://amazan.com/", waiting until "domcontentloaded"
+
+2025-10-17 18:08:09 - dr_ssm_eye - INFO - Saved scan for www.amazan.com
+2025-10-17 18:08:09 - dr_ssm_eye - INFO - Scan complete: www.amazan.com - SUSPICIOUS (85%)
+2025-10-17 18:08:09 - dr_ssm_eye - INFO - Scanning URL: 10.10.10.10
+2025-10-17 18:08:19 - dr_ssm_eye - WARNING - SSL check timeout for 10.10.10.10
+2025-10-17 18:08:36 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 18:08:46 - dr_ssm_eye - WARNING - Content check timeout for https://10.10.10.10
+2025-10-17 18:08:58 - dr_ssm_eye - ERROR - Screenshot capture error for https://10.10.10.10: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://10.10.10.10/", waiting until "domcontentloaded"
+
+2025-10-17 18:08:58 - dr_ssm_eye - INFO - Saved scan for 10.10.10.10
+2025-10-17 18:08:58 - dr_ssm_eye - INFO - Scan complete: 10.10.10.10 - SUSPICIOUS (70%)
+2025-10-17 18:08:58 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 18:09:13 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:09:13 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-17 18:09:22 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-17 18:09:22 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 18:09:22 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-17 18:12:45 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:12:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:45 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:12:45 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:45 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 18:12:48 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:12:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:48 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-17 18:12:48 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:12:48 - dr_ssm_eye - INFO - Starting web server...
+2025-10-17 18:13:04 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-17 18:13:04 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-17 18:13:06 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-17 18:13:19 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:13:19 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.174: [WinError 2] The system cannot find the file specified
+2025-10-17 18:13:20 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 18:13:31 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 18:13:31 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-17 18:13:31 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (95%)
+2025-10-17 18:13:31 - dr_ssm_eye - INFO - Scanning URL: www.amazan.com
+2025-10-17 18:13:32 - dr_ssm_eye - WARNING - SSL error for amazan.com: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1032)
+2025-10-17 18:13:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:13:46 - dr_ssm_eye - WARNING - ASN lookup failed for 172.237.146.8: [WinError 2] The system cannot find the file specified
+2025-10-17 18:13:50 - dr_ssm_eye - ERROR - Screenshot capture error for https://amazan.com: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://amazan.com/
+Call log:
+  - navigating to "https://amazan.com/", waiting until "domcontentloaded"
+
+2025-10-17 18:13:50 - dr_ssm_eye - INFO - Saved scan for www.amazan.com
+2025-10-17 18:13:50 - dr_ssm_eye - INFO - Scan complete: www.amazan.com - SUSPICIOUS (85%)
+2025-10-17 18:13:50 - dr_ssm_eye - INFO - Scanning URL: 10.10.10.10
+2025-10-17 18:14:00 - dr_ssm_eye - WARNING - SSL check timeout for 10.10.10.10
+2025-10-17 18:14:17 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 18:14:27 - dr_ssm_eye - WARNING - Content check timeout for https://10.10.10.10
+2025-10-17 18:14:39 - dr_ssm_eye - ERROR - Screenshot capture error for https://10.10.10.10: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://10.10.10.10/", waiting until "domcontentloaded"
+
+2025-10-17 18:14:39 - dr_ssm_eye - INFO - Saved scan for 10.10.10.10
+2025-10-17 18:14:39 - dr_ssm_eye - INFO - Scan complete: 10.10.10.10 - SUSPICIOUS (70%)
+2025-10-17 18:14:39 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 18:14:54 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:14:55 - dr_ssm_eye - WARNING - ASN lookup failed for 104.26.8.129: [WinError 2] The system cannot find the file specified
+2025-10-17 18:15:05 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-17 18:15:05 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 18:15:05 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-17 18:18:46 - dr_ssm_eye - INFO - Scanning URL: https://tracking.rastreos-coordinadora.co/
+2025-10-17 18:19:02 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:19:02 - dr_ssm_eye - WARNING - ASN lookup failed for 104.21.32.234: [WinError 2] The system cannot find the file specified
+2025-10-17 18:19:09 - dr_ssm_eye - INFO - Screenshot captured for https://tracking.rastreos-coordinadora.co
+2025-10-17 18:19:09 - dr_ssm_eye - INFO - Saved scan for https://tracking.rastreos-coordinadora.co/
+2025-10-17 18:19:09 - dr_ssm_eye - INFO - Scan complete: https://tracking.rastreos-coordinadora.co/ - MALICIOUS (85%)
+2025-10-17 18:19:09 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-17 18:19:24 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:19:24 - dr_ssm_eye - WARNING - ASN lookup failed for 142.251.46.174: [WinError 2] The system cannot find the file specified
+2025-10-17 18:19:26 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-17 18:19:34 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-17 18:19:34 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-17 18:19:34 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (95%)
+2025-10-17 18:19:34 - dr_ssm_eye - INFO - Scanning URL: www.amazan.com
+2025-10-17 18:19:35 - dr_ssm_eye - WARNING - SSL error for amazan.com: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1032)
+2025-10-17 18:19:49 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:19:49 - dr_ssm_eye - WARNING - ASN lookup failed for 172.237.146.8: [WinError 2] The system cannot find the file specified
+2025-10-17 18:19:54 - dr_ssm_eye - ERROR - Screenshot capture error for https://amazan.com: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://amazan.com/
+Call log:
+  - navigating to "https://amazan.com/", waiting until "domcontentloaded"
+
+2025-10-17 18:19:54 - dr_ssm_eye - INFO - Saved scan for www.amazan.com
+2025-10-17 18:19:54 - dr_ssm_eye - INFO - Scan complete: www.amazan.com - SUSPICIOUS (85%)
+2025-10-17 18:19:54 - dr_ssm_eye - INFO - Scanning URL: 10.10.10.10
+2025-10-17 18:20:04 - dr_ssm_eye - WARNING - SSL check timeout for 10.10.10.10
+2025-10-17 18:20:21 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-17 18:20:31 - dr_ssm_eye - WARNING - Content check timeout for https://10.10.10.10
+2025-10-17 18:20:43 - dr_ssm_eye - ERROR - Screenshot capture error for https://10.10.10.10: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://10.10.10.10/", waiting until "domcontentloaded"
+
+2025-10-17 18:20:43 - dr_ssm_eye - INFO - Saved scan for 10.10.10.10
+2025-10-17 18:20:43 - dr_ssm_eye - INFO - Scan complete: 10.10.10.10 - SUSPICIOUS (70%)
+2025-10-17 18:20:43 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-17 18:20:58 - dr_ssm_eye - INFO - Database initialized
+2025-10-17 18:20:58 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-17 18:21:08 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-17 18:21:08 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-17 18:21:08 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-18 22:17:49 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:17:49 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:49 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:49 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:49 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:17:49 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:49 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:17:52 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:17:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:52 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:17:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:17:52 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:18:10 - dr_ssm_eye - INFO - Scanning URL: https://tracking.rastreos-coordinadora.co/
+2025-10-18 22:18:10 - dr_ssm_eye - WARNING - WHOIS lookup failed for tracking.rastreos-coordinadora.co: module 'whois' has no attribute 'whois'
+2025-10-18 22:18:10 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:18:12 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:18:22 - dr_ssm_eye - WARNING - SSL check failed for tracking.rastreos-coordinadora.co: [Errno 11001] getaddrinfo failed
+2025-10-18 22:18:48 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: HTTPSConnectionPool(host='tracking.rastreos-coordinadora.co', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x00000297B0479A90>: Failed to resolve 'tracking.rastreos-coordinadora.co' ([Errno 11001] getaddrinfo failed)"))
+2025-10-18 22:18:59 - dr_ssm_eye - WARNING - Content check request error for https://tracking.rastreos-coordinadora.co: HTTPSConnectionPool(host='tracking.rastreos-coordinadora.co', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x00000297B044FED0>: Failed to resolve 'tracking.rastreos-coordinadora.co' ([Errno 11001] getaddrinfo failed)"))
+2025-10-18 22:19:12 - dr_ssm_eye - ERROR - Screenshot capture error for https://tracking.rastreos-coordinadora.co: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://tracking.rastreos-coordinadora.co/", waiting until "domcontentloaded"
+
+2025-10-18 22:19:12 - dr_ssm_eye - INFO - Saved scan for https://tracking.rastreos-coordinadora.co/
+2025-10-18 22:19:12 - dr_ssm_eye - INFO - Scan complete: https://tracking.rastreos-coordinadora.co/ - MALICIOUS (85%)
+2025-10-18 22:19:12 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-18 22:19:12 - dr_ssm_eye - WARNING - WHOIS lookup failed for google.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:19:27 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:19:27 - dr_ssm_eye - WARNING - ASN lookup failed for 142.250.68.14: [WinError 2] The system cannot find the file specified
+2025-10-18 22:19:28 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 22:19:37 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-18 22:19:37 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-18 22:19:37 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (85%)
+2025-10-18 22:19:37 - dr_ssm_eye - INFO - Scanning URL: www.amazan.com
+2025-10-18 22:19:37 - dr_ssm_eye - WARNING - WHOIS lookup failed for amazan.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:19:38 - dr_ssm_eye - WARNING - SSL error for amazan.com: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1032)
+2025-10-18 22:19:52 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:19:52 - dr_ssm_eye - WARNING - ASN lookup failed for 172.233.219.78: [WinError 2] The system cannot find the file specified
+2025-10-18 22:19:57 - dr_ssm_eye - ERROR - Screenshot capture error for https://amazan.com: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://amazan.com/
+Call log:
+  - navigating to "https://amazan.com/", waiting until "domcontentloaded"
+
+2025-10-18 22:19:57 - dr_ssm_eye - INFO - Saved scan for www.amazan.com
+2025-10-18 22:19:57 - dr_ssm_eye - INFO - Scan complete: www.amazan.com - MALICIOUS (85%)
+2025-10-18 22:19:57 - dr_ssm_eye - INFO - Scanning URL: 10.10.10.10
+2025-10-18 22:19:57 - dr_ssm_eye - WARNING - WHOIS lookup failed for 10.10.10.10: module 'whois' has no attribute 'whois'
+2025-10-18 22:20:07 - dr_ssm_eye - WARNING - SSL check timeout for 10.10.10.10
+2025-10-18 22:20:22 - dr_ssm_eye - WARNING - Redirect tracking timeout at hop 0
+2025-10-18 22:20:32 - dr_ssm_eye - WARNING - Content check timeout for https://10.10.10.10
+2025-10-18 22:20:44 - dr_ssm_eye - ERROR - Screenshot capture error for https://10.10.10.10: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://10.10.10.10/", waiting until "domcontentloaded"
+
+2025-10-18 22:20:44 - dr_ssm_eye - INFO - Saved scan for 10.10.10.10
+2025-10-18 22:20:44 - dr_ssm_eye - INFO - Scan complete: 10.10.10.10 - SUSPICIOUS (70%)
+2025-10-18 22:20:44 - dr_ssm_eye - INFO - Scanning URL: https://shorturl.at/9NFHE
+2025-10-18 22:20:44 - dr_ssm_eye - WARNING - WHOIS lookup failed for shorturl.at: module 'whois' has no attribute 'whois'
+2025-10-18 22:20:59 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:20:59 - dr_ssm_eye - WARNING - ASN lookup failed for 172.67.69.88: [WinError 2] The system cannot find the file specified
+2025-10-18 22:21:09 - dr_ssm_eye - INFO - Screenshot captured for https://shorturl.at/9NFHE
+2025-10-18 22:21:09 - dr_ssm_eye - INFO - Saved scan for https://shorturl.at/9NFHE
+2025-10-18 22:21:09 - dr_ssm_eye - INFO - Scan complete: https://shorturl.at/9NFHE - SUSPICIOUS (70%)
+2025-10-18 22:21:09 - dr_ssm_eye - INFO - Scanning URL: coinbase-support-log.pages.dev
+2025-10-18 22:21:09 - dr_ssm_eye - WARNING - WHOIS lookup failed for coinbase-support-log.pages.dev: module 'whois' has no attribute 'whois'
+2025-10-18 22:21:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:21:25 - dr_ssm_eye - WARNING - ASN lookup failed for 172.66.47.135: [WinError 2] The system cannot find the file specified
+2025-10-18 22:21:31 - dr_ssm_eye - INFO - Screenshot captured for https://coinbase-support-log.pages.dev
+2025-10-18 22:21:31 - dr_ssm_eye - INFO - Saved scan for coinbase-support-log.pages.dev
+2025-10-18 22:21:31 - dr_ssm_eye - INFO - Scan complete: coinbase-support-log.pages.dev - MALICIOUS (85%)
+2025-10-18 22:21:31 - dr_ssm_eye - INFO - Scanning URL: https://pastebin.com/raw/zqDKG2LF
+2025-10-18 22:21:31 - dr_ssm_eye - WARNING - WHOIS lookup failed for pastebin.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:21:46 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:21:46 - dr_ssm_eye - WARNING - ASN lookup failed for 172.66.171.73: [WinError 2] The system cannot find the file specified
+2025-10-18 22:21:51 - dr_ssm_eye - INFO - Screenshot captured for https://pastebin.com/raw/zqDKG2LF
+2025-10-18 22:21:51 - dr_ssm_eye - INFO - Saved scan for https://pastebin.com/raw/zqDKG2LF
+2025-10-18 22:21:51 - dr_ssm_eye - INFO - Scan complete: https://pastebin.com/raw/zqDKG2LF - SUSPICIOUS (70%)
+2025-10-18 22:21:51 - dr_ssm_eye - INFO - Scanning URL: https://github.com/mcp/microsoft/playwright-mcp
+2025-10-18 22:21:51 - dr_ssm_eye - WARNING - WHOIS lookup failed for github.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:22:06 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:22:06 - dr_ssm_eye - WARNING - ASN lookup failed for 140.82.116.3: [WinError 2] The system cannot find the file specified
+2025-10-18 22:22:23 - dr_ssm_eye - INFO - Screenshot captured for https://github.com/mcp/microsoft/playwright-mcp
+2025-10-18 22:22:23 - dr_ssm_eye - INFO - Saved scan for https://github.com/mcp/microsoft/playwright-mcp
+2025-10-18 22:22:23 - dr_ssm_eye - INFO - Scan complete: https://github.com/mcp/microsoft/playwright-mcp - CLEAN (85%)
+2025-10-18 22:24:50 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:24:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:50 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:24:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:50 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:24:53 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:24:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:53 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:24:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:24:53 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:25:17 - dr_ssm_eye - INFO - Scanning URL: www.google.com
+2025-10-18 22:25:17 - dr_ssm_eye - WARNING - WHOIS lookup failed for google.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:25:17 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:25:19 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:25:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:25:32 - dr_ssm_eye - WARNING - ASN lookup failed for 142.250.72.174: [WinError 2] The system cannot find the file specified
+2025-10-18 22:25:33 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 22:25:43 - dr_ssm_eye - INFO - Screenshot captured for https://google.com
+2025-10-18 22:25:43 - dr_ssm_eye - INFO - Saved scan for www.google.com
+2025-10-18 22:25:43 - dr_ssm_eye - INFO - Scan complete: www.google.com - CLEAN (85%)
+2025-10-18 22:25:53 - dr_ssm_eye - INFO - Generated PDF report for www.google.com
+2025-10-18 22:30:15 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:30:15 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:15 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:15 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:15 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:30:15 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:15 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:30:18 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:30:18 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:18 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:18 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:18 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:30:18 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:18 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:30:35 - dr_ssm_eye - INFO - Scanning URL: github.com
+2025-10-18 22:30:35 - dr_ssm_eye - WARNING - WHOIS lookup failed for github.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:30:35 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:30:37 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:30:50 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:30:50 - dr_ssm_eye - WARNING - ASN lookup failed for 140.82.116.3: [WinError 2] The system cannot find the file specified
+2025-10-18 22:31:08 - dr_ssm_eye - ERROR - Screenshot capture error for https://github.com: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://github.com/", waiting until "domcontentloaded"
+
+2025-10-18 22:31:08 - dr_ssm_eye - INFO - Saved scan for github.com
+2025-10-18 22:31:08 - dr_ssm_eye - INFO - Scan complete: github.com - CLEAN (95%)
+2025-10-18 22:31:18 - dr_ssm_eye - INFO - Generated PDF report for github.com
+2025-10-18 22:45:21 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:45:21 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:21 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:21 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:21 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:45:21 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:21 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:45:25 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:45:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:25 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:45:25 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:45:25 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:45:51 - dr_ssm_eye - INFO - Scanning URL: proton.me
+2025-10-18 22:45:51 - dr_ssm_eye - WARNING - WHOIS lookup failed for proton.me: module 'whois' has no attribute 'whois'
+2025-10-18 22:45:51 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:45:53 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:46:07 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:46:07 - dr_ssm_eye - WARNING - ASN lookup failed for 185.70.42.45: [WinError 2] The system cannot find the file specified
+2025-10-18 22:46:21 - dr_ssm_eye - INFO - Screenshot captured for https://proton.me
+2025-10-18 22:46:21 - dr_ssm_eye - INFO - Saved scan for proton.me
+2025-10-18 22:46:21 - dr_ssm_eye - INFO - Scan complete: proton.me - SUSPICIOUS (75%)
+2025-10-18 22:46:40 - dr_ssm_eye - INFO - Generated PDF report for proton.me
+2025-10-18 22:49:17 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:49:17 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:17 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:17 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:17 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:49:17 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:17 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:49:20 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:49:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:20 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:49:20 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:20 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:49:37 - dr_ssm_eye - INFO - Scanning URL: claude.ai
+2025-10-18 22:49:37 - dr_ssm_eye - WARNING - WHOIS lookup failed for claude.ai: module 'whois' has no attribute 'whois'
+2025-10-18 22:49:38 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:49:39 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:49:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:49:53 - dr_ssm_eye - WARNING - ASN lookup failed for 160.79.104.10: [WinError 2] The system cannot find the file specified
+2025-10-18 22:50:03 - dr_ssm_eye - INFO - Screenshot captured for https://claude.ai
+2025-10-18 22:50:03 - dr_ssm_eye - INFO - Saved scan for claude.ai
+2025-10-18 22:50:03 - dr_ssm_eye - INFO - Scan complete: claude.ai - SUSPICIOUS (70%)
+2025-10-18 22:52:09 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:52:09 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:09 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:09 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:09 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:52:09 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:09 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:52:12 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:52:12 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:12 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:12 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:12 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:52:12 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:12 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:52:31 - dr_ssm_eye - INFO - Scanning URL: x.com
+2025-10-18 22:52:31 - dr_ssm_eye - WARNING - WHOIS lookup failed for x.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:52:32 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:52:33 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:52:47 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:52:47 - dr_ssm_eye - WARNING - ASN lookup failed for 172.66.0.227: [WinError 2] The system cannot find the file specified
+2025-10-18 22:52:59 - dr_ssm_eye - INFO - Screenshot captured for https://x.com
+2025-10-18 22:52:59 - dr_ssm_eye - INFO - Saved scan for x.com
+2025-10-18 22:52:59 - dr_ssm_eye - INFO - Scan complete: x.com - CLEAN (85%)
+2025-10-18 22:56:27 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:56:27 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:27 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:27 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:27 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:56:27 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:27 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:56:30 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:56:30 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:30 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:30 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:30 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 22:56:30 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:56:30 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 22:57:16 - dr_ssm_eye - INFO - Scanning URL: https://www.virustotal.com/
+2025-10-18 22:57:16 - dr_ssm_eye - WARNING - WHOIS lookup failed for virustotal.com: module 'whois' has no attribute 'whois'
+2025-10-18 22:57:16 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 22:57:18 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 22:57:32 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 22:57:32 - dr_ssm_eye - WARNING - ASN lookup failed for 216.239.38.21: [WinError 2] The system cannot find the file specified
+2025-10-18 22:57:33 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 22:57:41 - dr_ssm_eye - INFO - Screenshot captured for https://virustotal.com
+2025-10-18 22:57:41 - dr_ssm_eye - INFO - Saved scan for https://www.virustotal.com/
+2025-10-18 22:57:41 - dr_ssm_eye - INFO - Scan complete: https://www.virustotal.com/ - SUSPICIOUS (75%)
+2025-10-18 23:00:21 - dr_ssm_eye - INFO - Scanning URL: microsoft.com
+2025-10-18 23:00:21 - dr_ssm_eye - WARNING - WHOIS lookup failed for microsoft.com: module 'whois' has no attribute 'whois'
+2025-10-18 23:00:36 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:00:36 - dr_ssm_eye - WARNING - ASN lookup failed for 13.107.213.69: [WinError 2] The system cannot find the file specified
+2025-10-18 23:00:38 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 23:00:52 - dr_ssm_eye - ERROR - Screenshot capture error for https://microsoft.com: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "https://microsoft.com/", waiting until "domcontentloaded"
+
+2025-10-18 23:00:52 - dr_ssm_eye - INFO - Saved scan for microsoft.com
+2025-10-18 23:00:52 - dr_ssm_eye - INFO - Scan complete: microsoft.com - CLEAN (85%)
+2025-10-18 23:02:38 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:02:38 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:38 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:38 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:38 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:02:38 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:38 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 23:02:41 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:02:41 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:41 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:41 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:41 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:02:41 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:02:41 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 23:02:54 - dr_ssm_eye - INFO - Scanning URL: facebook.com
+2025-10-18 23:02:54 - dr_ssm_eye - WARNING - WHOIS lookup failed for facebook.com: module 'whois' has no attribute 'whois'
+2025-10-18 23:02:54 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 23:02:56 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 23:03:10 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:03:10 - dr_ssm_eye - WARNING - ASN lookup failed for 57.144.220.1: [WinError 2] The system cannot find the file specified
+2025-10-18 23:03:11 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 23:03:20 - dr_ssm_eye - INFO - Screenshot captured for https://facebook.com
+2025-10-18 23:03:20 - dr_ssm_eye - INFO - Saved scan for facebook.com
+2025-10-18 23:03:20 - dr_ssm_eye - INFO - Scan complete: facebook.com - CLEAN (95%)
+2025-10-18 23:11:11 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:11:11 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:11 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:11 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:11 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:11:11 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:11 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 23:11:14 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:11:14 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:14 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:14 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:14 - dr_ssm_eye - WARNING - ML model not found, using rule-based classification only
+2025-10-18 23:11:14 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:14 - dr_ssm_eye - INFO - Starting web server...
+2025-10-18 23:11:37 - dr_ssm_eye - INFO - Scanning URL: instagram.com
+2025-10-18 23:11:37 - dr_ssm_eye - WARNING - WHOIS lookup failed for instagram.com: module 'whois' has no attribute 'whois'
+2025-10-18 23:11:37 - dr_ssm_eye - INFO - Loaded threat feeds - URLhaus: 23148, OpenPhish: 300, PhishTank: 0
+2025-10-18 23:11:39 - dr_ssm_eye - INFO - Loaded Tranco whitelist: 10000 top 10K, 100000 top 100K
+2025-10-18 23:11:53 - dr_ssm_eye - INFO - Database initialized
+2025-10-18 23:11:53 - dr_ssm_eye - WARNING - ASN lookup failed for 57.144.220.34: [WinError 2] The system cannot find the file specified
+2025-10-18 23:11:54 - dr_ssm_eye - WARNING - Redirect tracking error at hop 0: Exceeded 0 redirects.
+2025-10-18 23:12:06 - dr_ssm_eye - INFO - Screenshot captured for https://instagram.com
+2025-10-18 23:12:06 - dr_ssm_eye - INFO - Saved scan for instagram.com
+2025-10-18 23:12:06 - dr_ssm_eye - INFO - Scan complete: instagram.com - CLEAN (95%)
+2025-10-18 23:15:11 - dr_ssm_eye - INFO - Generated PDF report for instagram.com

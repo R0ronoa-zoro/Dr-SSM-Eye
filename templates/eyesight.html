@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. SSM Eye - EyeSight</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .nav {
+            margin-top: 15px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .filter-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group input, .filter-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .filter-group input:focus, .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .screenshot {
+            width: 100%;
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .url-text {
+            font-size: 13px;
+            color: #666;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .clean { background: #d4edda; color: #155724; }
+        .suspicious { background: #fff3cd; color: #856404; }
+        .malicious { background: #f8d7da; color: #721c24; }
+        .analyst { background: #d1ecf1; color: #0c5460; }
+        
+        .info-text {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-small {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dr. SSM Eye</h1>
+        <p>Historical Scan Database</p>
+        <div class="nav">
+            <a href="/">HOME</a>
+            <a href="/eyesight" class="active">EYESIGHT</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="filter-box">
+            <div class="filter-group">
+                <input type="text" id="searchInput" placeholder="Search URL...">
+                <select id="classFilter">
+                    <option value="all">All Classifications</option>
+                    <option value="CLEAN">Clean</option>
+                    <option value="SUSPICIOUS">Suspicious</option>
+                    <option value="MALICIOUS">Malicious</option>
+                    <option value="ANALYST_REQUIRED">Analyst Required</option>
+                </select>
+                <select id="dateFilter">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">Last 7 Days</option>
+                    <option value="month">Last 30 Days</option>
+                </select>
+                <button class="btn-primary" onclick="loadScans()">Apply Filters</button>
+            </div>
+        </div>
+        
+        <div id="results" class="loading">
+            <p>Loading scans...</p>
+        </div>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            loadScans();
+        };
+        
+        function loadScans() {
+            const search = document.getElementById('searchInput').value;
+            const classification = document.getElementById('classFilter').value;
+            const dateRange = document.getElementById('dateFilter').value;
+            
+            let url = '/api/scans?';
+            if (classification !== 'all') url += `classification=${classification}&`;
+            if (search) url += `search=${encodeURIComponent(search)}&`;
+            if (dateRange !== 'all') url += `date_range=${dateRange}&`;
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    displayScans(data.scans);
+                })
+                .catch(err => {
+                    document.getElementById('results').innerHTML = '<p style="color: red;">Error loading scans</p>';
+                });
+        }
+        
+        function displayScans(scans) {
+            const container = document.getElementById('results');
+            
+            if (!scans || scans.length === 0) {
+                container.innerHTML = '<div class="filter-box"><p>No scans found</p></div>';
+                return;
+            }
+            
+            let html = '<div class="results-grid">';
+            
+            scans.forEach(scan => {
+                const classification = scan.classification || 'UNKNOWN';
+                const url = scan.url || scan.normalized_url;
+                const lastScanned = scan.last_scanned || 'Unknown';
+                const scanCount = scan.scan_count || 1;
+                const thumbnailPath = scan.thumbnail_path || '';
+                
+                html += `
+                    <div class="result-card">
+                        <div class="screenshot">
+                            ${thumbnailPath ? `<img src="/screenshot/${thumbnailPath}" alt="Screenshot">` : '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">No screenshot</div>'}
+                        </div>
+                        <div class="url-text">${url}</div>
+                        <div class="badge ${classification.toLowerCase()}">${classification}</div>
+                        <div class="info-text">Last: ${lastScanned}</div>
+                        <div class="info-text">Scans: ${scanCount}</div>
+                        <div class="action-buttons">
+                            <a href="/details/${encodeURIComponent(url)}" class="btn-primary btn-small">Details</a>
+                            <button class="btn-primary btn-small" onclick="rescan('${url}')">Re-scan</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function rescan(url) {
+            if (!confirm('Re-scan this URL?')) return;
+            
+            fetch(`/api/rescan/${encodeURIComponent(url)}`, {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('Re-scan complete');
+                loadScans();
+            })
+            .catch(err => {
+                alert('Re-scan failed: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

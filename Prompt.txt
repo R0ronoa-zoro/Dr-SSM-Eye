@@ -1,0 +1,1694 @@
+Dr. SSM Eye - Complete Architecture Document for AI Implementation
+Project Summary
+Dr. SSM Eye is an advanced phishing detection system that analyzes URLs using multi-layered intelligence (threat feeds, visual analysis, brand matching, ML classification) to determine if a URL is Clean, Suspicious, Malicious, or requires Analyst review. The system provides explainable reasoning for every classification decision.
+Target Accuracy: 95%+ with <2% false positives
+Scale: Personal project, 200 URLs max, 25 per bulk upload
+Resource Budget: <3.5GB storage, 300-400MB RAM peak
+
+System Architecture Overview
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER INTERFACE                          │
+│  ┌──────────────────┐              ┌──────────────────┐        │
+│  │   HOME PAGE      │              │  EYESIGHT PAGE   │        │
+│  │ (Active Scanning)│              │ (History/Archive)│        │
+│  └────────┬─────────┘              └────────┬─────────┘        │
+└───────────┼──────────────────────────────────┼─────────────────┘
+            │                                  │
+            ▼                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      CORE ORCHESTRATOR                          │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Scanner.py - Main workflow coordinator                  │  │
+│  │  - URL normalization                                     │  │
+│  │  - Module execution (parallel where possible)            │  │
+│  │  - Result aggregation                                    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└───────────┬─────────────────────────────────────┬───────────────┘
+            │                                     │
+            ▼                                     ▼
+┌─────────────────────────┐         ┌──────────────────────────┐
+│   DETECTION MODULES     │         │   VISUAL ANALYSIS        │
+│  (Parallel Execution)   │         │   (Async Background)     │
+├─────────────────────────┤         ├──────────────────────────┤
+│ 1. Threat Intel Check   │         │ - Screenshot Capture     │
+│ 2. Whitelist Check      │         │ - Favicon Extraction     │
+│ 3. Brand Verification   │         │ - Logo Detection         │
+│ 4. Typosquatting        │         │ - Perceptual Hashing     │
+│ 5. IP Reputation        │         │ - Similarity Scoring     │
+│ 6. DNS Analysis         │         └──────────────────────────┘
+│ 7. WHOIS Lookup         │
+│ 8. SSL Check            │
+│ 9. Redirect Tracking    │
+│10. Content Analysis     │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│               CLASSIFICATION & REASONING ENGINE                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Feature Aggregation → Risk Scoring → ML Classification  │  │
+│  │  → Reasoning Generation → Confidence Calculation         │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└───────────┬─────────────────────────────────────┬───────────────┘
+            │                                     │
+            ▼                                     ▼
+┌─────────────────────────┐         ┌──────────────────────────┐
+│   DATA STORAGE          │         │   REPORT GENERATION      │
+│  (Hybrid Approach)      │         │   (On-Demand PDF)        │
+├─────────────────────────┤         ├──────────────────────────┤
+│ SQLite: scan_history.db │         │ - Per-URL Detailed       │
+│ JSON: brands.json       │         │ - Batch Summary          │
+│ Files: screenshots/     │         │ - Batch Detailed         │
+└─────────────────────────┘         └──────────────────────────┘
+
+Component Specifications
+1. Core Orchestrator (scanner.py)
+Responsibilities:
+
+URL validation and normalization
+Parallel execution of detection modules
+Result aggregation from all modules
+Error handling and retry logic
+Progress tracking for bulk scans
+
+Key Functions:
+pythondef scan_url(url: str) -> ScanResult:
+    """
+    Main entry point for scanning a single URL
+    
+    Process:
+    1. Normalize URL
+    2. Check cache (if exists, return cached result)
+    3. Execute detection modules in parallel
+    4. Aggregate features (23 features)
+    5. Calculate risk score
+    6. ML classification
+    7. Generate reasoning
+    8. Trigger async screenshot
+    9. Store in database
+    10. Return result
+    
+    Returns: ScanResult object with classification, confidence, risk_score, reasoning
+    """
+
+def scan_bulk(urls: List[str], max_urls: int = 25) -> List[ScanResult]:
+    """
+    Bulk URL scanning with progress tracking
+    
+    Process:
+    1. Validate all URLs (filter invalid)
+    2. Process in batches of 3-5 parallel scans
+    3. Update progress callback
+    4. Return results as they complete (progressive)
+    """
+
+def normalize_url(url: str) -> str:
+    """
+    Normalize URL to standard format
+    
+    Transformations:
+    - Add https:// if missing
+    - Remove www. prefix for comparison
+    - Lowercase domain
+    - Remove trailing slashes
+    - Handle IDN/punycode domains
+    
+    Examples:
+    - google.com → https://google.com
+    - WWW.GOOGLE.COM → https://google.com
+    - https://google.com/ → https://google.com
+    """
+Data Structures:
+python@dataclass
+class ScanResult:
+    url: str
+    normalized_url: str
+    classification: str  # CLEAN, SUSPICIOUS, MALICIOUS, ANALYST_REQUIRED
+    confidence: float  # 0-100
+    risk_score: int  # -100 to +200
+    reasoning: List[Reason]
+    features: Dict[str, Any]
+    screenshot_status: str  # pending, ready, failed
+    screenshot_paths: Dict[str, str]  # thumbnail, full
+    timestamp: datetime
+    scan_duration: float
+
+@dataclass
+class Reason:
+    feature: str
+    value: Any
+    points: int
+    impact: str  # positive, negative
+    description: str
+
+2. Detection Modules
+Each module returns a standardized result:
+python@dataclass
+class ModuleResult:
+    module_name: str
+    features: Dict[str, Any]
+    risk_contribution: int  # positive or negative points
+    confidence: float
+    error: Optional[str]
+Module 2.1: Threat Intelligence (threat_intel.py)
+Data Sources:
+
+PhishTank (10K requests/hour, free)
+URLhaus (unlimited, free)
+OpenPhish (unlimited, free)
+Google Safe Browsing (10K requests/day)
+
+Function:
+pythondef check_threat_feeds(url: str) -> ModuleResult:
+    """
+    Check URL against all threat feeds
+    
+    Process:
+    1. Query PhishTank database (local cache + API)
+    2. Query URLhaus database (local cache + API)
+    3. Query OpenPhish feed (local cache)
+    4. Query Google Safe Browsing API
+    5. Aggregate results
+    
+    Scoring:
+    - Found in PhishTank: +50 points
+    - Found in URLhaus: +50 points
+    - Found in OpenPhish: +50 points
+    - Found in Google Safe Browsing: +50 points
+    - Not found: 0 points
+    
+    Returns: ModuleResult with threat_found: bool, sources: List[str]
+    """
+Local Cache Strategy:
+python# Update threat feeds daily via cron
+def update_threat_feeds():
+    """
+    Download latest feeds and update local database
+    
+    Process:
+    1. Download PhishTank CSV
+    2. Download URLhaus CSV
+    3. Download OpenPhish feed
+    4. Extract URLs and IPs
+    5. Update SQLite tables (malicious_urls, malicious_ips)
+    6. Delete entries older than 90 days
+    """
+Module 2.2: Whitelist Check (whitelist_check.py)
+Data Source: Tranco Top 1M list (updated weekly)
+Function:
+pythondef check_whitelist(domain: str) -> ModuleResult:
+    """
+    Check if domain is in Tranco whitelist
+    
+    Process:
+    1. Load Tranco top 10K set (in memory)
+    2. Load Tranco top 100K set (in memory)
+    3. Check domain membership
+    
+    Scoring:
+    - In top 10K: -50 points (very trusted)
+    - In top 100K: -20 points (trusted)
+    - In top 1M: -5 points (known site)
+    - Not in list: 0 points
+    
+    Returns: ModuleResult with rank: Optional[int], tier: str
+    """
+Storage:
+python# Load at startup
+tranco_top_10k = set(load_tranco(limit=10000))  # ~200KB in memory
+tranco_top_100k = set(load_tranco(limit=100000))  # ~2MB in memory
+Module 2.3: Brand Verification (brand_check.py)
+Data: brands.json (600+ brands)
+Function:
+pythondef check_brand_impersonation(url: str, content: str, favicon: bytes, screenshot: bytes) -> ModuleResult:
+    """
+    Comprehensive brand impersonation detection
+    
+    Process:
+    1. Extract domain from URL
+    2. Check if domain matches any brand exactly (official asset)
+    3. Check URL similarity to brand domains (typosquatting)
+    4. Check favicon hash against brand favicons
+    5. Check page title for brand keywords
+    6. If logo detection enabled: detect logos in screenshot
+    7. Calculate overall impersonation score
+    8. Determine if legitimate use (payment integration) or impersonation
+    
+    Context-Aware Logic:
+    - If favicon matches brand AND domain similar → IMPERSONATION
+    - If favicon does NOT match brand BUT logo present → LEGITIMATE (payment integration)
+    - If layout similar AND favicon matches → IMPERSONATION
+    
+    Scoring:
+    - Official brand domain: -40 points (legitimate)
+    - URL typosquats brand: +25 points
+    - Favicon matches brand: +40 points
+    - Logo in header position: +35 points
+    - Logo in footer position: +15 points (likely payment integration)
+    - Layout >85% similar: +25 points
+    - Page title contains brand: +10 points
+    
+    Context adjustments:
+    - Favicon mismatch (own favicon): -40 points (likely legitimate)
+    - Domain age >3 years: -25 points
+    - Business SSL cert: -15 points
+    
+    Returns: ModuleResult with brand_detected: str, impersonation_score: int, 
+             impersonation_type: str, evidence: Dict
+    """
+Brand Database Structure:
+json{
+  "brands": [
+    {
+      "id": "paypal_us",
+      "name": "PayPal",
+      "region": "North America",
+      "category": "Financial",
+      "domains": ["paypal.com", "paypal.me"],
+      "favicon_hash": "abc123def456",
+      "logo_hash": "def456ghi789",
+      "common_typos": ["paypa1", "paypai", "paypall", "pay-pal"],
+      "keywords": ["paypal", "pay pal"],
+      "verified": true,
+      "last_updated": "2025-10-16"
+    }
+  ]
+}
+Module 2.4: Typosquatting Detection (typosquat.py)
+Function:
+pythondef detect_typosquatting(domain: str) -> ModuleResult:
+    """
+    Detect typosquatting against known brands
+    
+    Techniques:
+    1. Levenshtein distance (edit distance)
+    2. Character substitution (a→@, o→0, i→1, e→3)
+    3. Missing characters
+    4. Double characters
+    5. Homograph attacks (Cyrillic/Greek characters that look like Latin)
+    6. Combosquatting (brand + common word)
+    
+    Process:
+    1. Extract base domain (remove TLD)
+    2. For each brand in database:
+       - Calculate Levenshtein distance
+       - Check for character substitutions
+       - Check for homographs (Unicode normalization)
+    3. If similarity >80%, flag as typosquatting
+    
+    Scoring:
+    - 90-100% similarity: +30 points (obvious typosquat)
+    - 80-89% similarity: +20 points (likely typosquat)
+    - 70-79% similarity: +10 points (possible typosquat)
+    
+    Returns: ModuleResult with target_brand: str, similarity: float, 
+             technique: str, original: str, typo: str
+    """
+Homograph Detection:
+pythondef detect_homographs(domain: str) -> bool:
+    """
+    Detect Unicode homograph attacks
+    
+    Examples:
+    - раypal.com (Cyrillic 'а' looks like Latin 'a')
+    - аpple.com (Cyrillic 'а')
+    - gοοgle.com (Greek omicron 'ο' looks like Latin 'o')
+    
+    Process:
+    1. Normalize domain to Unicode
+    2. Check for mixed scripts (Latin + Cyrillic + Greek)
+    3. Check confusable characters using confusable_homoglyphs library
+    4. Flag if suspicious mix detected
+    """
+Module 2.5: IP Reputation (ip_reputation.py)
+Data Source: Custom database built from threat feeds
+Database Schema:
+sqlCREATE TABLE malicious_ips (
+    ip_address TEXT PRIMARY KEY,
+    asn INTEGER,
+    asn_name TEXT,
+    country TEXT,
+    first_seen DATE,
+    last_seen DATE,
+    threat_type TEXT,  -- phishing, malware, spam, c2
+    confidence INTEGER,  -- 1-100
+    source TEXT,  -- phishtank, urlhaus, custom
+    notes TEXT
+);
+
+CREATE INDEX idx_ip ON malicious_ips(ip_address);
+CREATE INDEX idx_asn ON malicious_ips(asn);
+CREATE INDEX idx_last_seen ON malicious_ips(last_seen);
+Function:
+pythondef check_ip_reputation(ip: str) -> ModuleResult:
+    """
+    Check IP reputation
+    
+    Process:
+    1. Resolve domain to IP address
+    2. Check if private IP (192.168.x.x, 10.x.x.x, 172.16-31.x.x) → Safe
+    3. Query malicious_ips database
+    4. Get ASN information (ipwhois library)
+    5. Check ASN against known bad ASNs
+    6. Calculate reputation score
+    
+    Scoring:
+    - Private IP: -50 points (safe)
+    - IP in malicious database (fresh <7 days): +50 points
+    - IP in malicious database (recent <30 days): +30 points
+    - IP in malicious database (old <90 days): +15 points
+    - ASN in suspicious list: +30 points
+    - Unknown: 0 points
+    
+    Returns: ModuleResult with ip: str, asn: int, asn_name: str, 
+             reputation: str, days_since_last_seen: int
+    """
+
+def get_asn_info(ip: str) -> Dict:
+    """
+    Get ASN information for IP
+    
+    Uses: ipwhois library
+    Returns: asn, asn_name, country
+    """
+Daily Update Script:
+pythondef update_ip_database():
+    """
+    Daily cron job to update malicious IPs
+    
+    Process:
+    1. Download PhishTank, URLhaus, OpenPhish feeds
+    2. Extract all URLs
+    3. Resolve URLs to IP addresses
+    4. Insert/update malicious_ips table
+    5. Delete entries older than 90 days
+    6. Log statistics
+    """
+Module 2.6: DNS Analysis (dns_check.py)
+Function:
+pythondef analyze_dns(domain: str) -> ModuleResult:
+    """
+    Analyze DNS records
+    
+    Checks:
+    1. A/AAAA records (does domain resolve?)
+    2. MX records (email configured?)
+    3. NS records (nameserver provider)
+    4. Response time
+    
+    Process:
+    1. Query A record using dnspython
+    2. Query MX records
+    3. Query NS records
+    4. Measure response time
+    5. Assess nameserver reputation
+    
+    Scoring:
+    - No A record: +20 points (suspicious, site doesn't resolve)
+    - Has MX records: -10 points (legitimate businesses have email)
+    - No MX records: +10 points (suspicious)
+    - Reputable nameservers (Cloudflare, Route53, etc.): -5 points
+    - Unknown/sketchy nameservers: +15 points
+    - Slow DNS response (>2 sec): +10 points
+    
+    Returns: ModuleResult with has_a_record: bool, mx_records: List[str],
+             nameservers: List[str], response_time: float
+    """
+Module 2.7: WHOIS Lookup (whois_check.py)
+Function:
+pythondef check_whois(domain: str) -> ModuleResult:
+    """
+    WHOIS domain information lookup
+    
+    Process:
+    1. Query WHOIS using python-whois library
+    2. Extract registration date, expiry date, registrar
+    3. Calculate domain age
+    4. Check if WHOIS privacy enabled
+    5. Handle errors gracefully (WHOIS blocked, rate limited)
+    
+    Scoring:
+    - Domain age <7 days: +30 points (very suspicious)
+    - Domain age 7-30 days: +20 points (suspicious)
+    - Domain age 30-365 days: +10 points (relatively new)
+    - Domain age 1-3 years: 0 points (neutral)
+    - Domain age >3 years: -30 points (established)
+    - WHOIS privacy enabled: +5 points (slight suspicion)
+    - Known sketchy registrar: +15 points
+    
+    Returns: ModuleResult with domain_age_days: int, registrar: str,
+             registration_date: datetime, expiry_date: datetime,
+             whois_privacy: bool
+    """
+Error Handling:
+python# WHOIS queries can fail - handle gracefully
+try:
+    whois_data = whois.whois(domain)
+except Exception as e:
+    # Don't break scan, just return unknown
+    return ModuleResult(
+        module_name="whois",
+        features={"domain_age_days": None, "error": str(e)},
+        risk_contribution=0,  # Neutral when unknown
+        confidence=0.0
+    )
+Module 2.8: SSL Certificate Check (ssl_check.py)
+Function:
+pythondef check_ssl_certificate(domain: str) -> ModuleResult:
+    """
+    SSL/TLS certificate analysis
+    
+    Process:
+    1. Establish SSL connection to domain
+    2. Extract certificate details
+    3. Check issuer (Let's Encrypt vs commercial CA)
+    4. Check validity period
+    5. Calculate certificate age
+    6. Check for self-signed certificates
+    7. Check subject alternative names (SANs)
+    
+    Scoring:
+    - No HTTPS: +10 points (suspicious for any legitimate site)
+    - Self-signed certificate: +25 points (very suspicious)
+    - Certificate <7 days old: +15 points (freshly set up)
+    - Certificate 7-30 days old: +10 points
+    - Certificate >1 year old: -20 points (established)
+    - Commercial CA (DigiCert, etc.): -15 points (legitimate business)
+    - Let's Encrypt: 0 points (neutral, commonly used by both)
+    - Invalid certificate: +30 points
+    
+    Returns: ModuleResult with has_https: bool, issuer: str, 
+             valid_from: datetime, valid_to: datetime, 
+             self_signed: bool, certificate_age_days: int
+    """
+Module 2.9: Redirect Chain Tracking (redirect_check.py)
+Function:
+pythondef track_redirects(url: str, max_hops: int = 5) -> ModuleResult:
+    """
+    Follow redirect chain
+    
+    Process:
+    1. Make HTTP request with allow_redirects=False
+    2. Follow redirects manually up to max_hops
+    3. Record each hop (URL, status code, timestamp)
+    4. Detect suspicious patterns
+    
+    Suspicious Patterns:
+    - URL shortener in chain (bit.ly, tinyurl, etc.)
+    - Multiple redirects (>3 hops)
+    - Redirect to different domain
+    - Redirect through compromised site
+    - Redirect loop
+    
+    Scoring:
+    - No redirects: 0 points
+    - 1-2 redirects: +5 points (slightly suspicious)
+    - 3-4 redirects: +15 points (suspicious)
+    - 5+ redirects: +25 points (very suspicious)
+    - Redirect through URL shortener: +15 points
+    - Final domain different from initial: +10 points
+    
+    Returns: ModuleResult with chain: List[RedirectHop], 
+             final_url: str, hop_count: int
+    """
+
+@dataclass
+class RedirectHop:
+    hop_number: int
+    url: str
+    status_code: int
+    timestamp: datetime
+Module 2.10: Content Analysis (content_check.py)
+Function:
+pythondef analyze_content(url: str) -> ModuleResult:
+    """
+    Analyze page content for suspicious indicators
+    
+    Process:
+    1. Fetch page HTML (with timeout)
+    2. Parse with BeautifulSoup
+    3. Extract page title
+    4. Detect login/password forms
+    5. Count external resources
+    6. Check for suspicious keywords
+    7. Analyze meta tags
+    
+    Suspicious Indicators:
+    - Password field present: +20 points (potential credential theft)
+    - Keywords: "verify", "urgent", "suspended", "limited time": +10 points each
+    - No meta tags: +5 points (low quality site)
+    - Excessive external resources (>50): +15 points
+    - JavaScript obfuscation detected: +20 points
+    
+    Protective Indicators:
+    - Proper meta tags (description, keywords): -5 points
+    - Low external resource count: -5 points
+    
+    Returns: ModuleResult with has_password_field: bool, 
+             page_title: str, suspicious_keywords: List[str],
+             external_resources: int
+    """
+
+3. Visual Analysis Components
+Component 3.1: Screenshot Capture (screenshot.py)
+Library: Playwright (headless Chromium)
+Function:
+pythonasync def capture_screenshot(url: str) -> Tuple[bytes, bytes]:
+    """
+    Capture screenshot asynchronously
+    
+    Process:
+    1. Launch headless browser (Playwright)
+    2. Navigate to URL (timeout: 10 seconds)
+    3. Wait for page load
+    4. Capture full size (800x600)
+    5. Generate thumbnail (100x75)
+    6. Save both to screenshots/ folder
+    7. Close browser
+    8. Return paths
+    
+    Optimization:
+    - Single browser instance shared across captures
+    - Viewport size: 800x600 (smaller = faster)
+    - Disable images loading (optional, for speed)
+    - Set short timeout (10 sec max)
+    
+    Error Handling:
+    - Site unreachable: return placeholder image
+    - Timeout: return placeholder image
+    - JavaScript errors: ignore, capture what's visible
+    
+    Returns: (thumbnail_bytes, full_bytes)
+    """
+
+def generate_thumbnail(full_image: bytes, size: Tuple[int, int] = (100, 75)) -> bytes:
+    """
+    Generate thumbnail from full screenshot
+    
+    Uses: Pillow
+    Process:
+    1. Load full image
+    2. Resize to thumbnail size (maintain aspect ratio)
+    3. Compress (JPEG quality 75 or PNG optimized)
+    4. Return bytes
+    """
+Storage:
+pythondef save_screenshots(url_hash: str, thumbnail: bytes, full: bytes) -> Dict[str, str]:
+    """
+    Save screenshots to disk
+    
+    Paths:
+    - screenshots/thumbnails/{url_hash}.png
+    - screenshots/full/{url_hash}.png
+    
+    Returns: {"thumbnail": path, "full": path}
+    """
+Component 3.2: Favicon Matching (favicon_match.py)
+Function:
+pythondef extract_and_match_favicon(url: str) -> ModuleResult:
+    """
+    Extract favicon and match against brand database
+    
+    Process:
+    1. Try common favicon URLs:
+       - https://domain/favicon.ico
+       - https://domain/apple-touch-icon.png
+       - Google's favicon service (fallback)
+    2. Download favicon
+    3. Compute perceptual hash (imagehash library)
+    4. Compare against all brand favicon hashes
+    5. Find best match (lowest hash distance)
+    6. If match found with distance <5, flag as brand impersonation
+    
+    Scoring:
+    - Favicon matches brand exactly (distance 0-2): +40 points
+    - Favicon similar to brand (distance 3-5): +25 points
+    - No match: 0 points
+    
+    Returns: ModuleResult with favicon_hash: str, 
+             matched_brand: Optional[str], 
+             hash_distance: int
+    """
+
+def compute_favicon_hash(favicon_bytes: bytes) -> str:
+    """
+    Compute perceptual hash of favicon
+    
+    Uses: imagehash library (average_hash)
+    
+    Process:
+    1. Load image from bytes
+    2. Compute average hash (8x8 = 64 bits)
+    3. Return hex string
+    """
+Component 3.3: Logo Detection (logo_detection.py)
+Library: OpenCV
+Function:
+pythondef detect_logo(screenshot: bytes, brand: str) -> ModuleResult:
+    """
+    Detect brand logo in screenshot
+    
+    Process:
+    1. Load screenshot and brand logo template
+    2. Use OpenCV template matching (cv2.matchTemplate)
+    3. Find best match location and confidence
+    4. Determine logo position (header vs footer)
+    5. Calculate logo size relative to viewport
+    
+    Logo Position Analysis:
+    - Y-coordinate <200px: Header (primary branding) → +35 points
+    - Y-coordinate >400px: Footer (likely payment integration) → +15 points
+    - Logo size >20% viewport: Primary branding → +20 points
+    - Logo size <5% viewport: Payment option → +10 points
+    
+    Returns: ModuleResult with logo_detected: bool, 
+             position: str (header/footer), 
+             confidence: float,
+             bounding_box: Tuple[int, int, int, int]
+    """
+Alternative (more robust):
+pythondef detect_logo_features(screenshot: bytes, brand_logo: bytes) -> ModuleResult:
+    """
+    Feature-based logo detection (handles rotation, scaling)
+    
+    Uses: ORB or SIFT feature matching
+    
+    Process:
+    1. Extract features from brand logo (one-time)
+    2. Extract features from screenshot
+    3. Match features using BFMatcher
+    4. Count good matches (distance < threshold)
+    5. If >10 good matches, logo detected
+    
+    More robust than template matching but slower.
+    """
+Component 3.4: Visual Similarity (similarity.py)
+Function:
+pythondef calculate_visual_similarity(screenshot1: bytes, screenshot2: bytes) -> float:
+    """
+    Calculate perceptual similarity between two screenshots
+    
+    Uses: imagehash library (perceptual hash)
+    
+    Process:
+    1. Compute perceptual hash of both images
+    2. Calculate Hamming distance between hashes
+    3. Convert to similarity percentage
+    
+    Hash distance interpretation:
+    - 0-5 bits different: 90-100% similar (very high)
+    - 6-10 bits: 80-90% similar (high)
+    - 11-15 bits: 70-80% similar (moderate)
+    - 16+ bits: <70% similar (low)
+    
+    Returns: similarity_percentage (0-100)
+    """
+
+def compare_with_brand_screenshot(url_screenshot: bytes, brand: str) -> ModuleResult:
+    """
+    Compare suspicious URL screenshot with legitimate brand screenshot
+    
+    Process:
+    1. Load pre-captured brand screenshot from assets/
+    2. Calculate visual similarity
+    3. If >85% similar, flag as impersonation
+    
+    Scoring:
+    - 90-100% similar: +25 points (almost identical layout)
+    - 85-89% similar: +20 points (very similar layout)
+    - 75-84% similar: +10 points (somewhat similar)
+    
+    Returns: ModuleResult with similarity: float, brand: str
+    """
+
+4. Classification & Reasoning Engine
+Component 4.1: Feature Aggregation (classifier.py)
+Function:
+pythondef aggregate_features(module_results: List[ModuleResult]) -> Dict[str, Any]:
+    """
+    Aggregate all module results into feature vector
+    
+    23 Features:
+    
+    URL String (10):
+    1. url_length
+    2. subdomain_count
+    3. has_ip_address
+    4. has_at_symbol
+    5. suspicious_tld
+    6. digit_to_letter_ratio
+    7. url_entropy
+    8. contains_brand_name
+    9. uses_url_shortener
+    10. hyphen_count
+    
+    Domain Intelligence (8):
+    11. domain_age_days
+    12. in_tranco_top_10k
+    13. in_threat_database
+    14. tld_reputation_score
+    15. has_https
+    16. certificate_age_days
+    17. subdomain_pattern_suspicious
+    18. non_standard_port
+    
+    Content (5):
+    19. response_time_ms
+    20. page_title_brand_match
+    21. has_password_field
+    22. external_resource_count
+    23. favicon_domain_match
+    
+    Returns: feature_dict
+    """
+Component 4.2: Risk Scoring (classifier.py)
+Function:
+pythondef calculate_risk_score(features: Dict[str, Any], module_results: List[ModuleResult]) -> Tuple[int, List[Reason]]:
+    """
+    Calculate weighted risk score
+    
+    Process:
+    1. Initialize score = 0
+    2. For each module result:
+       - Add risk_contribution to score
+       - Record reason
+    3. Apply feature-based adjustments
+    4. Cap score at -100 (very safe) to +200 (very dangerous)
+    
+    Major Scoring Rules:
+    - Found in threat database: +50
+    - Favicon matches brand: +40
+    - Domain <30 days: +30
+    - URL typosquats brand: +25
+    - Layout >85% similar: +25
+    - Self-signed SSL: +25
+    - Has password field: +20
+    - In Tranco Top 10K: -50
+    - Domain >3 years: -30
+    - Official brand asset: -40
+    
+    Returns: (risk_score, list_of_reasons)
+    """
+
+def classify_by_score(risk_score: int, confidence: float) -> str:
+    """
+    Map risk score to classification
+    
+    Thresholds:
+    - Score <-20: CLEAN
+    - Score -20 to 40: SUSPICIOUS
+    - Score >40: MALICIOUS
+    - Confidence <60%: ANALYST_REQUIRED (overrides score)
+    
+    Returns: classification string
+    """
+Component 4.3: ML Classification (classifier.py)
+Model: XGBoost trained on 100K+ labeled URLs
+Function:
+pythondef ml_classify(features: Dict[str, Any]) -> Tuple[str, float]:
+    """
+    Machine learning classification
+    
+    Process:
+    1. Load trained XGBoost model (from disk, cached in memory)
+    2. Transform features to model input format
+    3. Get prediction probabilities for each class
+    4. Return prediction and confidence
+    
+    Classes:
+    0: CLEAN
+    1: SUSPICIOUS
+    2: MALICIOUS
+    
+    Returns: (predicted_class, confidence)
+    """
+
+def train_model(training_data: pd.DataFrame):
+    """
+    Train XGBoost model
+    
+    Process:
+    1. Load labeled dataset (100K+ URLs with labels)
+    2. Split train/test (80/20)
+    3. Extract 23 features
+    4. Train XGBoost classifier
+    5. Evaluate on test set
+    6. Save model to disk
+    
+    Hyperparameters:
+    - max_depth: 6
+    - learning_rate: 0.1
+    - n_estimators: 100
+    - objective: multi:softprob (3 classes)
+    """
+Model Fallback:
+python# If ML model not available, use rule-based scoring only
+if ml_model is None:
+    classification = classify_by_score(risk_score, confidence=0.8)
+else:
+    # Combine rule-based score with ML prediction
+    ml_class, ml_conf = ml_classify(features)
+    rule_class = classify_by_score(risk_score, confidence=0.8)
+    
+    # If disagreement, prefer ML but reduce confidence
+    if ml_class != rule_class:
+        confidence = min(ml_conf, 0.7)
+    else:
+        confidence = ml_conf
+Component 4.4: Reasoning Generation (reasoning.py)
+Function:
+pythondef generate_reasoning(features: Dict[str, Any], module_results: List[ModuleResult], 
+                       risk_score: int, classification: str) -> List[Reason]:
+    """
+    Generate human-readable reasoning
+    
+    Process:
+    1. Sort reasons by absolute point value (highest impact first)
+    2. Group into "Malicious Indicators" and "Protective Factors"
+    3. Add descriptive text for each reason
+    4. Calculate confidence based on signal strength
+    
+    Example Output:
+    [
+        Reason(
+            feature="threat_database",
+            value="PhishTank ID: 8234567",
+            points=50,
+            impact="negative",
+            description="Found in PhishTank database (verified phishing)"
+        ),
+        Reason(
+            feature="domain_age",
+            value=3,
+            points=30,
+            impact="negative",
+            description="Domain registered only 3 days ago"
+        ),
+        ...
+    ]
+    
+    Returns: List[Reason] sorted by importance
+    """
+
+def format_reasoning_for_display(reasons: List[Reason]) -> str:
+    """
+    Format reasoning for UI display
+    
+    Output format:
+    
+    Malicious Indicators (+195 points):
+    1. Found in PhishTank database (+50)
+    2. Domain age: 3 days (+30)
+    3. Impersonates PayPal brand (+25)
+       - Favicon matches PayPal exactly (+40)
+       - Layout 92% similar to PayPal login (+25)
+    4. No HTTPS certificate (+10)
+    5. Suspicious TLD: .tk (+15)
+    
+    Protective Factors (0 points):
+    None detected
+    
+    Net Risk Score: +195/200
+    Classification: MALICIOUS
+    Confidence: 94%
+    """
+Component 4.5: Context-Aware Adjustments (reasoning.py)
+Function:
+pythondef apply_context_rules(features: Dict[str, Any], risk_score: int) -> Tuple[int, str]:
+    """
+    Apply context-aware adjustments to score
+    
+    Rules:
+    
+    1. Payment Integration Detection:
+       If (logo_detected AND favicon_does_not_match_brand AND domain_age > 1_year):
+           Likely legitimate payment integration
+           Reduce score by 60 points
+           Add note: "Appears to be legitimate use of brand for payment"
+    
+    2. Ambiguous Case Detection:
+       If (high_visual_similarity AND mixed_signals):
+           Override classification to ANALYST_REQUIRED
+    
+    3. Whitelisted with Suspicious Features:
+       If (in_tranco_top_10k AND suspicious_features):
+           Likely false positive
+           Cap risk_score at 20 (SUSPICIOUS at most)
+    
+    4. New Site with Legitimate Indicators:
+       If (domain_age < 30 AND has_mx_records AND proper_ssl AND no_threat_feeds):
+           Likely new legitimate business
+           Reduce new_domain penalty by 50%
+    
+    Returns: (adjusted_score, context_note)
+    """
+
+5. Data Storage Layer
+Database Schema (SQLite)
+sql-- Main scan results table
+CREATE TABLE url_scans (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT NOT NULL,
+    normalized_url TEXT,
+    source_url TEXT,  -- Original user input
+    dest_url TEXT,    -- Final destination after redirects
+    
+    classification TEXT NOT NULL,  -- CLEAN, SUSPICIOUS, MALICIOUS, ANALYST_REQUIRED
+    confidence REAL,
+    risk_score INTEGER,
+    
+    -- Timestamps
+    first_scanned TIMESTAMP,
+    last_scanned TIMESTAMP,
+    previous_scanned TIMESTAMP,
+    scan_count INTEGER DEFAULT 1,
+    
+    -- Status tracking
+    status_changed BOOLEAN DEFAULT 0,
+    previous_classification TEXT,
+    
+    -- Source tracking
+    scan_source TEXT,  -- Manual, Bulk Upload, API, Scheduled
+    
+    -- Feature storage (JSON)
+    features TEXT,  -- JSON string of all 23 features
+    
+    -- Reasoning storage (JSON)
+    reasoning TEXT,  -- JSON string of reasons
+    
+    -- Brand detection
+    brand_detected TEXT,
+    impersonation_score INTEGER,
+    
+    -- Screenshot tracking
+    screenshot_status TEXT,  -- pending, ready, failed
+    thumbnail_path TEXT,
+    full_screenshot_path TEXT,
+    
+    -- Technical details
+    ip_address TEXT,
+    asn INTEGER,
+    domain_age_days INTEGER,
+    
+    -- Performance
+    scan_duration_ms INTEGER,
+    
+    UNIQUE(normalized_url)
+);
+
+CREATE INDEX idx_classification ON url_scans(classification);
+CREATE INDEX idx_last_scanned ON url_scans(last_scanned);
+CREATE INDEX idx_brand ON url_scans(brand_detected);
+
+-- Malicious IPs table (from threat feeds)
+CREATE TABLE malicious_ips (
+    ip_address TEXT PRIMARY KEY,
+    asn INTEGER,
+    asn_name TEXT,
+    country TEXT,
+    first_seen DATE,
+    last_seen DATE,
+    threat_type TEXT,
+    confidence INTEGER,
+    source TEXT,
+    notes TEXT
+);
+
+CREATE INDEX idx_ip ON malicious_ips(ip_address);
+CREATE INDEX idx_asn ON malicious_ips(asn);
+CREATE INDEX idx_last_seen ON malicious_ips(last_seen);
+
+-- Screenshot metadata
+CREATE TABLE screenshot_metadata (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url_hash TEXT NOT NULL,
+    thumbnail_hash TEXT,
+    full_hash TEXT,
+    thumbnail_path TEXT,
+    full_path TEXT,
+    captured_at TIMESTAMP,
+    file_size_bytes INTEGER,
+    
+    FOREIGN KEY (url_hash) REFERENCES url_scans(normalized_url)
+);
+
+-- Analyst reviews (for feedback loop)
+CREATE TABLE analyst_reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT NOT NULL,
+    original_classification TEXT,
+    analyst_verdict TEXT,
+    analyst_notes TEXT,
+    reviewed_at TIMESTAMP,
+    reviewed_by TEXT,
+    
+    FOREIGN KEY (url) REFERENCES url_scans(normalized_url)
+);
+JSON Data Files
+brands.json:
+json{
+  "version": "1.0",
+  "last_updated": "2025-10-16",
+  "total_brands": 600,
+  "brands": [
+    {
+      "id": "paypal_us",
+      "name": "PayPal",
+      "region": "North America",
+      "category": "Financial",
+      "domains": ["paypal.com", "paypal.me"],
+      "favicon_hash": "abc123def456",
+      "logo_hash": "def456ghi789",
+      "common_typos": ["paypa1", "paypai", "paypall"],
+      "keywords": ["paypal", "pay pal"],
+      "verified": true
+    }
+  ]
+}
+```
+
+**tranco_top_1m.csv:**
+```
+rank,domain
+1,google.com
+2,youtube.com
+3,facebook.com
+...
+
+6. Report Generation
+Component 6.1: PDF Generator (pdf_generator.py)
+Library: WeasyPrint
+Function:
+pythondef generate_per_url_report(scan_result: ScanResult) -> bytes:
+    """
+    Generate detailed PDF report for single URL
+    
+    Process:
+    1. Load HTML template (per_url_template.html)
+    2. Populate with scan result data
+    3. Embed screenshots (base64)
+    4. Add side-by-side comparison if brand impersonation
+    5. Render to PDF with WeasyPrint
+    6. Return PDF bytes
+    
+    Template sections:
+    - Executive Summary (1 page)
+    - Screenshot (1 page)
+    - Threat Assessment (1-2 pages)
+    - Detailed Analysis (2-3 pages)
+    - Technical Details (1-2 pages)
+    - Threat Intelligence (1 page)
+    - Takedown Information (1 page if malicious)
+    
+    Total: 5-10 pages
+    """
+
+def generate_batch_summary_report(scan_results: List[ScanResult]) -> bytes:
+    """
+    Generate batch summary report
+    
+    Process:
+    1. Calculate statistics (X clean, Y suspicious, Z malicious)
+    2. Identify high-priority issues
+    3. Load batch_summary_template.html
+    4. Populate with aggregated data
+    5. Render to PDF
+    
+    Template sections:
+    - Overview (1 page)
+    - High-Priority Issues (1 page)
+    - Recommendations (1 page)
+    
+    Total: 2-3 pages
+    """
+
+def generate_batch_detailed_report(scan_results: List[ScanResult]) -> bytes:
+    """
+    Generate comprehensive batch report
+    
+    Process:
+    1. Generate batch summary section
+    2. For each URL: generate per-URL report content
+    3. Append all together
+    4. Add statistical analysis section
+    5. Render to PDF
+    
+    Total: 50+ pages for 25 URLs
+    """
+HTML Template Example (per_url_template.html):
+html<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Phishing Analysis Report - {{ url }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .header { background: #2c3e50; color: white; padding: 20px; }
+        .clean { color: #27ae60; }
+        .suspicious { color: #f39c12; }
+        .malicious { color: #e74c3c; }
+        .section { page-break-inside: avoid; margin-bottom: 30px; }
+        .screenshot { max-width: 100%; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { padding: 8px; border: 1px solid #ddd; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>URL Analysis Report</h1>
+        <p>Generated by Dr. SSM Eye</p>
+    </div>
+    
+    <div class="section">
+        <h2>Executive Summary</h2>
+        <table>
+            <tr><td>URL</td><td>{{ url }}</td></tr>
+            <tr><td>Scanned</td><td>{{ timestamp }}</td></tr>
+            <tr><td>Classification</td><td class="{{ classification }}">{{ classification }}</td></tr>
+            <tr><td>Confidence</td><td>{{ confidence }}%</td></tr>
+            <tr><td>Risk Score</td><td>{{ risk_score }}/200</td></tr>
+        </table>
+        <p><strong>Recommendation:</strong> {{ recommendation }}</p>
+    </div>
+    
+    <div class="section">
+        <h2>Screenshot</h2>
+        <img src="data:image/png;base64,{{ screenshot_base64 }}" class="screenshot">
+    </div>
+    
+    {% if brand_impersonation %}
+    <div class="section">
+        <h2>Brand Impersonation Detected</h2>
+        <p>Target Brand: <strong>{{ brand_name }}</strong></p>
+        <div style="display: flex;">
+            <div style="flex: 1;">
+                <h3>Legitimate Site</h3>
+                <img src="data:image/png;base64,{{ legitimate_screenshot }}" style="width:100%;">
+            </div>
+            <div style="flex: 1;">
+                <h3>Suspicious Site</h3>
+                <img src="data:image/png;base64,{{ suspicious_screenshot }}" style="width:100%;">
+            </div>
+        </div>
+        <p>Visual Similarity: {{ similarity }}%</p>
+    </div>
+    {% endif %}
+    
+    <div class="section">
+        <h2>Detailed Analysis</h2>
+        <h3>Malicious Indicators (+{{ malicious_points }} points)</h3>
+        <ul>
+        {% for reason in malicious_reasons %}
+            <li>{{ reason.description }} (+{{ reason.points }})</li>
+        {% endfor %}
+        </ul>
+        
+        <h3>Protective Factors ({{ protective_points }} points)</h3>
+        <ul>
+        {% for reason in protective_reasons %}
+            <li>{{ reason.description }} ({{ reason.points }})</li>
+        {% endfor %}
+        </ul>
+    </div>
+    
+    <!-- More sections... -->
+</body>
+</html>
+Component 6.2: Takedown Report Generator (pdf_generator.py)
+Function:
+pythondef generate_takedown_json(scan_result: ScanResult) -> Dict:
+    """
+    Generate takedown report in JSON format
+    
+    Includes:
+    - URL and scan details
+    - Registrar contact info (from WHOIS)
+    - Hosting provider contact (from IP/ASN lookup)
+    - Evidence (screenshots, threat feed references)
+    - Recommended actions
+    
+    Saved to: (not saved, generated in memory and downloaded)
+    """
+```
+
+---
+
+### 7. User Interface Specifications
+
+#### Page 7.1: Home (Active Workspace)
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────┐
+│  [Dr. SSM Eye Logo]    HOME    EYESIGHT            │
+└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│  Enter URL or paste multiple URLs (max 25)         │
+│  ┌───────────────────────────────────────────────┐ │
+│  │ https://example.com                           │ │
+│  │ paypal.com                                    │ │
+│  │ bit.ly/xyz123                                 │ │
+│  │                                               │ │
+│  └───────────────────────────────────────────────┘ │
+│  [Scan URLs]  [Clear]                              │
+└─────────────────────────────────────────────────────┘
+
+Showing 1-10 of 23 URLs
+
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+│              │              │              │              │              │
+│ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │
+│              │              │              │              │              │
+│ google.com   │ paypa1.tk    │ amazon.com   │ bit.ly/abc   │ example.com  │
+│ CLEAN        │ MALICIOUS    │ CLEAN        │ SUSPICIOUS   │ UNDEFINED    │
+│ Score: -85   │ Score: 195   │ Score: -90   │ Score: 55    │ Scanning...  │
+│ Conf: 98%    │ Conf: 94%    │ Conf: 99%    │ Conf: 72%    │              │
+│              │              │              │              │              │
+│ [☐] Details  │ [☐] Details  │ [☐] Details  │ [☐] Details  │ [☐] Details  │
+└──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+│ (Row 2 - 5 more cards)                                                    │
+└──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+
+[< Prev]  Page 1 of 3  [Next >]
+```
+
+**Card Details (on click "Details"):**
+Opens modal popup with:
+- Full screenshot
+- Complete analysis
+- All technical details
+- Export report button
+- Takedown button (if malicious)
+
+**Bulk Actions (when checkboxes selected):**
+- Export selected reports
+- Clear selected
+
+#### Page 7.2: EyeSight (Historical Database)
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────┐
+│  [Dr. SSM Eye Logo]    HOME    EYESIGHT            │
+└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│  Filters:                                           │
+│  Search: [_______________]                          │
+│  Tag: [All ▼] Date: [Last 7 days ▼]                │
+│  Keyword: [_______________]  [Apply] [Reset]        │
+└─────────────────────────────────────────────────────┘
+
+Total: 247 URLs scanned
+
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+│              │              │              │              │              │
+│ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │ [Thumbnail]  │
+│              │              │              │              │              │
+│ paypa1.tk    │ google.com   │ amazon.com   │ ...          │ ...          │
+│ MALICIOUS    │ CLEAN        │ CLEAN        │              │              │
+│ Last: Oct 16 │ Last: Oct 16 │ Last: Oct 15 │              │              │
+│ Prev: Oct 15 │ Prev: Oct 10 │ Prev: Oct 1  │              │              │
+│ Scans: 2     │ Scans: 5     │ Scans: 3     │              │              │
+│              │              │              │              │              │
+│ [Re-scan]    │ [Re-scan]    │ [Re-scan]    │              │              │
+│ [Details]    │ [Details]    │ [Details]    │              │              │
+└──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+
+Showing 1-10 of 247 URLs
+
+[< Prev]  Page 1 of 25  [Next >]
+Features:
+
+Search by URL/keyword
+Filter by classification tag
+Date range filter
+Re-scan button (updates existing entry)
+Shows scan history (last scanned, previous scanned, count)
+Flags status changes (was Malicious → now Clean)
+
+
+8. Implementation Guidelines
+8.1 Module Development Order
+Phase 1: Core Infrastructure (Week 1)
+
+URL normalization
+Database setup (SQLite schema)
+Core orchestrator (scanner.py)
+Basic UI (Home page input)
+
+Phase 2: Detection Modules (Week 1-2)
+
+Whitelist check (Tranco) - simplest
+Threat intelligence (PhishTank, URLhaus, OpenPhish)
+DNS analysis
+WHOIS lookup
+SSL certificate check
+Content analysis
+Redirect tracking
+
+Phase 3: Brand & Visual (Week 2-3)
+
+Brand database creation (collect 600+ brands)
+Typosquatting detection
+Brand verification
+Screenshot capture (Playwright)
+Favicon matching
+Logo detection (OpenCV)
+Visual similarity
+
+Phase 4: Intelligence & ML (Week 3-4)
+
+IP reputation database
+ASN tracking
+Feature aggregation
+Risk scoring
+Reasoning engine
+Dataset collection (100K+ URLs)
+XGBoost training
+
+Phase 5: Polish (Week 4-5)
+
+EyeSight page
+Re-scan functionality
+Report generation (3 types)
+Filters and search
+Performance optimization
+Error handling
+Testing
+
+8.2 Testing Strategy
+Unit Tests:
+python# Test each module independently
+def test_threat_intel_module():
+    result = check_threat_feeds("known-phishing.com")
+    assert result.risk_contribution > 0
+    assert "phishtank" in result.features["sources"]
+
+def test_typosquatting():
+    result = detect_typosquatting("paypa1.com")
+    assert result.features["target_brand"] == "PayPal"
+    assert result.features["similarity"] > 0.9
+Integration Tests:
+python# Test full scan workflow
+def test_full_scan():
+    result = scan_url("https://google.com")
+    assert result.classification == "CLEAN"
+    assert result.confidence > 0.9
+    assert result.risk_score < 0
+Benchmark Tests:
+python# Test against known datasets
+def test_phishtank_dataset():
+    phishtank_urls = load_phishtank_dataset()
+    results = [scan_url(url) for url in phishtank_urls[:1000]]
+    
+    detected = sum(1 for r in results if r.classification == "MALICIOUS")
+    detection_rate = detected / len(results)
+    
+    assert detection_rate > 0.95  # 95%+ detection rate
+8.3 Performance Optimization
+Caching:
+python# Cache Tranco list in memory
+tranco_cache = load_tranco_at_startup()
+
+# Cache threat feeds (update daily)
+threat_feed_cache = load_threat_feeds_at_startup()
+
+# Cache WHOIS results (TTL: 7 days)
+whois_cache = {}
+
+# Cache DNS results (TTL: 24 hours)
+dns_cache = {}
+Parallel Execution:
+python# Run independent modules in parallel
+from concurrent.futures import ThreadPoolExecutor
+
+def scan_url(url):
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {
+            executor.submit(check_threat_feeds, url): "threat_intel",
+            executor.submit(check_whitelist, domain): "whitelist",
+            executor.submit(check_whois, domain): "whois",
+            executor.submit(analyze_dns, domain): "dns",
+            executor.submit(check_ssl_certificate, domain): "ssl"
+        }
+        
+        results = {}
+        for future in as_completed(futures):
+            module_name = futures[future]
+            results[module_name] = future.result()
+        
+        return results
+Screenshot Queue:
+python# Async screenshot processing
+screenshot_queue = Queue()
+
+def screenshot_worker():
+    while True:
+        url, callback = screenshot_queue.get()
+        screenshot = capture_screenshot(url)
+        callback(screenshot)
+        screenshot_queue.task_done()
+
+# Start worker threads
+for i in range(2):  # 2 concurrent screenshot captures
+    Thread(target=screenshot_worker, daemon=True).start()
+8.4 Error Handling Patterns
+Graceful Degradation:
+pythondef scan_url(url):
+    results = []
+    
+    # Critical modules (must succeed)
+    try:
+        threat_result = check_threat_feeds(url)
+        results.append(threat_result)
+    except Exception as e:
+        logger.error(f"Threat intel check failed: {e}")
+        # Use default safe result
+        results.append(default_threat_result())
+    
+    # Non-critical modules (can fail)
+    try:
+        whois_result = check_whois(url)
+        results.append(whois_result)
+    except Exception as e:
+        logger.warning(f"WHOIS lookup failed: {e}")
+        # Continue without WHOIS data
+        results.append(ModuleResult(
+            module_name="whois",
+            features={"error": str(e)},
+            risk_contribution=0,
+            confidence=0.0
+        ))
+    
+    # Aggregate whatever results we have
+    return aggregate_results(results)
+Timeout Handling:
+pythonimport timeout_decorator
+
+@timeout_decorator.timeout(10)
+def check_ssl_certificate(domain):
+    # Will raise TimeoutError if takes >10 seconds
+    ...
+
+# Usage
+try:
+    result = check_ssl_certificate(domain)
+except TimeoutError:
+    logger.warning(f"SSL check timeout for {domain}")
+    result = default_ssl_result()
+
+9. API Contracts (Internal Module Communication)
+Module Result Interface:
+python@dataclass
+class ModuleResult:
+    module_name: str
+    features: Dict[str, Any]
+    risk_contribution: int
+    confidence: float
+    error: Optional[str] = None
+    execution_time_ms: int = 0
+Scan Result Interface:
+python@dataclass
+class ScanResult:
+    url: str
+    normalized_url: str
+    classification: str
+    confidence: float
+    risk_score: int
+    reasoning: List[Reason]
+    features: Dict[str, Any]
+    screenshot_status: str
+    screenshot_paths: Dict[str, str]
+    timestamp: datetime
+    scan_duration: float
+Reason Interface:
+python@dataclass
+class Reason:
+    feature: str
+    value: Any
+    points: int
+    impact: str
+    description: str
+
+10. Configuration & Settings
+config/settings.py:
+python# Threat Feed Settings
+PHISHTANK_API_KEY = "your_key_here"  # Optional
+GOOGLE_SAFE_BROWSING_API_KEY = "your_key_here"
+UPDATE_FEEDS_INTERVAL_HOURS = 24
+
+# Tranco Settings
+TRANCO_UPDATE_INTERVAL_DAYS = 7
+TRANCO_TOP_N = 1000000
+
+# Screenshot Settings
+SCREENSHOT_TIMEOUT_SECONDS = 10
+SCREENSHOT_VIEWPORT_WIDTH = 800
+SCREENSHOT_VIEWPORT_HEIGHT = 600
+THUMBNAIL_SIZE = (100, 75)
+MAX_CONCURRENT_SCREENSHOTS = 2
+
+# Scan Settings
+MAX_BULK_UPLOAD = 25
+SCAN_TIMEOUT_SECONDS = 30
+MAX_REDIRECT_HOPS = 5
+MAX_PARALLEL_SCANS = 3
+
+# Scoring Thresholds
+CLEAN_THRESHOLD = -20
+SUSPICIOUS_THRESHOLD = 40
+MALICIOUS_THRESHOLD = 40
+ANALYST_REQUIRED_CONFIDENCE = 0.60
+
+# Storage Settings
+DATABASE_PATH = "storage/scan_history.db"
+SCREENSHOT_PATH = "storage/screenshots/"
+CACHE_WHOIS_DAYS = 7
+CACHE_DNS_HOURS = 24
+MAX_SCREENSHOT_AGE_DAYS = 30
+
+# Brand Database
+BRANDS_JSON_PATH = "data/brands.json"
+BRAND_ASSETS_PATH = "assets/"
+MIN_FAVICON_MATCH_SCORE = 5  # Lower = better match
+MIN_VISUAL_SIMILARITY = 0.85  # 85%
+
+# Performance
+DATABASE_POOL_SIZE = 10
+HTTP_REQUEST_TIMEOUT = 10
+DNS_TIMEOUT = 5
+WHOIS_TIMEOUT = 10
+
+11. Deployment Checklist
+Pre-Launch:
+
+ All 10+ detection modules implemented and tested
+ Brand database populated (600+ brands)
+ Threat feeds downloading and updating daily
+ Screenshot system working (async, two-tier)
+ ML model trained (95%+ accuracy)
+ Database schema created
+ Both UI pages functional
+ Report generation working (all 3 types)
+ Error handling tested
+ Performance benchmarks met (<300ms per URL)
+
+Data Preparation:
+
+ Tranco list downloaded
+ Threat feeds initial download
+ Brand favicons collected
+ Brand logos collected
+ Legitimate brand screenshots captured
+ Perceptual hashes computed for all assets
+
+Testing:
+
+ Unit tests passing (all modules)
+ Integration tests passing (full workflow)
+ Benchmark against PhishTank dataset (95%+ detection)
+ False positive rate <2%
+ Performance stress test (25 URL bulk upload)
+
+Documentation:
+
+ README.md complete
+ User guide (how to use the tool)
+ Technical documentation (for future development)
+ API documentation (if exposing API)
+
+
+12. Future Enhancement Roadmap
+Phase 6: ML Retraining Pipeline
+
+Collect analyst feedback from "Analyst Required" cases
+Automated retraining script (weekly/monthly)
+A/B testing framework for model updates
+Model version control
+
+Phase 7: API & Integrations
+
+RESTful API endpoints
+Authentication (API keys)
+Rate limiting
+Webhook support
+Browser extension
+
+Phase 8: Advanced Features
+
+Real-time monitoring dashboard
+Email notifications
+Automated takedown submission
+CSV export
+Charts/graphs in UI and reports
+Advanced search in EyeSight
+
+Phase 9: Scale & Performance
+
+Distributed scanning (multiple workers)
+Cloud deployment
+Caching layer (Redis)
+CDN for static assets
+Load balancing
+
+Phase 10: Community & Collaboration
+
+Open source brand database
+Community contributions
+Threat intelligence sharing
+Integration with MISP
+Public API (with rate limits)
+
+
+Summary for AI Implementation
+This document provides complete specifications for building Dr. SSM Eye:
+
+Architecture: Multi-layered detection with 10+ modules, visual analysis, ML classification
+Components: All major components specified with function signatures and logic
+Data: Database schemas, JSON formats, storage strategies
+Algorithms: Scoring logic, classification thresholds, context-aware rules
+UI: Complete layout specifications for Home and EyeSight pages
+Reports: Three PDF report types with HTML templates
+Performance: Optimization strategies, caching, parallel execution
+Testing: Unit, integration, and benchmark testing approaches
+Deployment: Checklist and configuration
+
+Key Implementation Notes:
+
+Start with core infrastructure and basic modules
+Add complexity progressively (threat feeds → visual analysis → ML)
+Test each module independently before integration
+Optimize only after functionality is working
+Document as you build
+
+Success Metrics:
+
+95%+ accuracy on known phishing (PhishTank dataset)
+<2% false positive rate on legitimate sites (Tranco top 10K)
+<300ms per URL analysis (without screenshot)
+<4 seconds total (with screenshot)
+Explainable reasoning for 100% of classifications
+
+This architecture is production-ready for a personal project scope (200 URLs max). For scaling to thousands of URLs or multi-user deployment, additional infrastructure (Redis, PostgreSQL, load balancing) would be needed.
