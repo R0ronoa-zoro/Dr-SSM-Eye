@@ -15,16 +15,6 @@ logger = logging.getLogger('dr_ssm_eye')
 
 
 def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
-    """
-    Analyze page content for suspicious indicators
-    
-    Args:
-        url: URL to analyze
-        timeout: Request timeout in seconds
-    
-    Returns:
-        ModuleResult with content analysis
-    """
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -39,7 +29,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                     "error": f"HTTP {response.status_code}",
                     "has_password_field": False,
                     "suspicious_keywords": [],
-                    "page_title": None
+                    "page_title": None,
+                    "status_code": response.status_code
                 },
                 risk_contribution=0,
                 confidence=0.0
@@ -54,7 +45,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                     "error": "Empty response",
                     "has_password_field": False,
                     "suspicious_keywords": [],
-                    "page_title": None
+                    "page_title": None,
+                    "status_code": response.status_code
                 },
                 risk_contribution=0,
                 confidence=0.0
@@ -112,7 +104,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                 "page_title": page_title,
                 "suspicious_keywords": found_keywords,
                 "has_meta_tags": has_meta,
-                "external_resources": external_count
+                "external_resources": external_count,
+                "status_code": response.status_code
             },
             risk_contribution=risk,
             confidence=0.7
@@ -126,7 +119,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                 "error": "timeout",
                 "has_password_field": False,
                 "suspicious_keywords": [],
-                "page_title": None
+                "page_title": None,
+                "status_code": None
             },
             risk_contribution=0,
             confidence=0.0
@@ -140,7 +134,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                 "error": str(e),
                 "has_password_field": False,
                 "suspicious_keywords": [],
-                "page_title": None
+                "page_title": None,
+                "status_code": None
             },
             risk_contribution=0,
             confidence=0.0
@@ -154,7 +149,8 @@ def analyze_content(url: str, timeout: int = 10) -> ModuleResult:
                 "error": str(e),
                 "has_password_field": False,
                 "suspicious_keywords": [],
-                "page_title": None
+                "page_title": None,
+                "status_code": None
             },
             risk_contribution=0,
             confidence=0.0
