@@ -2,7 +2,7 @@
 Dr. SSM Eye - Typosquatting Detection Module
 """
 
-import Levenshtein
+import difflib
 from typing import Optional, Tuple
 import unicodedata
 
@@ -41,14 +41,7 @@ def calculate_similarity(str1: str, str2: str) -> float:
     if not str1 or not str2:
         return 0.0
     
-    distance = Levenshtein.distance(str1.lower(), str2.lower())
-    max_len = max(len(str1), len(str2))
-    
-    if max_len == 0:
-        return 1.0
-    
-    similarity = 1.0 - (distance / max_len)
-    return similarity
+    return difflib.SequenceMatcher(None, str1.lower(), str2.lower()).ratio()
 
 
 def check_character_substitution(domain: str, brand: str) -> Tuple[bool, str]:
@@ -131,7 +124,7 @@ def detect_typosquatting(url: str) -> ModuleResult:
                 if similarity > best_similarity:
                     best_similarity = similarity
                     best_match_brand = brand['name']
-                    best_technique = "levenshtein_distance"
+                    best_technique = "similarity_match"
                     features["original"] = brand_name
                 
                 is_sub, sub_type = check_character_substitution(domain_name, brand_name)
