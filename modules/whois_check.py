@@ -1,106 +1,95 @@
 """
-Dr. SSM Eye - WHOIS Lookup Module
+WHOIS domain information lookup using whoisfreaks.com
 """
 
-import whois
+import logging
 from datetime import datetime
+from typing import Optional
+import http.client
+import json
 
 from core.data_models import ModuleResult
 from core.url_normalizer import extract_domain
-from config.settings import (
-    WHOIS_TIMEOUT, DOMAIN_AGE_VERY_NEW_POINTS, DOMAIN_AGE_NEW_POINTS,
-    DOMAIN_AGE_RECENT_POINTS, DOMAIN_AGE_NEUTRAL_POINTS,
-    DOMAIN_AGE_ESTABLISHED_POINTS, WHOIS_PRIVACY_POINTS,
-    WHOIS_SKETCHY_REGISTRAR_POINTS, SKETCHY_REGISTRARS
-)
-from utils.logger import logger
-from utils.helpers import days_between
 
+logger = logging.getLogger('dr_ssm_eye')
+
+WHOISFREAKS_API_KEY = "813fa47a434f46689afd391e67cb7acb"
 
 def check_whois(url: str) -> ModuleResult:
     try:
         domain = extract_domain(url)
         
-        try:
-            whois_data = whois.whois(domain)
-        except Exception as e:
-            logger.warning(f"WHOIS lookup failed for {domain}: {e}")
+        conn = http.client.HTTPSConnection("api.whoisfreaks.com")
+        
+        conn.request(
+            "GET", 
+            f"/v1.0/whois?apiKey={WHOISFREAKS_API_KEY}&whois=live&domainName={domain}",
+            headers={}
+        )
+        
+        res = conn.getresponse()
+        data = res.read()
+        
+        if res.status == 200:
+            whois_data = json.loads(data.decode("utf-8"))
+            
+            create_date_str = whois_data.get('create_date')
+            expire_date_str = whois_data.get('expires_date')
+            
+            domain_age = None
+            if create_date_str:
+                try:
+                    create_date = datetime.strptime(create_date_str, '%Y-%m-%d')
+                    domain_age = (datetime.now() - create_date).days
+                except:
+                    try:
+                        create_date = datetime.strptime(create_date_str.split('T')[0], '%Y-%m-%d')
+                        domain_age = (datetime.now() - create_date).days
+                    except:
+                        logger.warning(f"Could not parse date: {create_date_str}")
+            
+            registrar_name = whois_data.get('registrar_name', 'Unknown')
+            
             return ModuleResult(
-                module_name="whois_check",
-                features={"error": "WHOIS lookup failed"},
-                risk_contribution=0,
-                confidence=0.0,
-                error=str(e)
+                module_name="whois",
+                features={
+                    "domain_age_days": domain_age,
+                    "registrar": registrar_name,
+                    "registration_date": create_date_str,
+                    "expiry_date": expire_date_str,
+                    "whois_privacy": whois_data.get('privacy_protected', False)
+                },
+                risk_contribution=calculate_whois_risk(domain_age),
+                confidence=0.9
             )
-        
-        features = {
-            "domain_age_days": None,
-            "registrar": None,
-            "registration_date": None,
-            "expiry_date": None,
-            "whois_privacy": False
-        }
-        
-        risk_contribution = 0
-        
-        creation_date = whois_data.creation_date
-        if isinstance(creation_date, list):
-            creation_date = creation_date[0]
-        
-        if creation_date:
-            from datetime import timezone
-            if creation_date.tzinfo is None:
-                creation_date = creation_date.replace(tzinfo=timezone.utc)
-            now = datetime.now(timezone.utc)
-            domain_age = days_between(creation_date, now)
-            features["domain_age_days"] = domain_age
-            features["registration_date"] = creation_date.isoformat()
-            
-            if domain_age < 7:
-                risk_contribution += DOMAIN_AGE_VERY_NEW_POINTS
-            elif domain_age < 30:
-                risk_contribution += DOMAIN_AGE_NEW_POINTS
-            elif domain_age < 365:
-                risk_contribution += DOMAIN_AGE_RECENT_POINTS
-            elif domain_age < 1095:
-                risk_contribution += DOMAIN_AGE_NEUTRAL_POINTS
-            else:
-                risk_contribution += DOMAIN_AGE_ESTABLISHED_POINTS
-        
-        expiry_date = whois_data.expiration_date
-        if isinstance(expiry_date, list):
-            expiry_date = expiry_date[0]
-        
-        if expiry_date:
-            features["expiry_date"] = expiry_date.isoformat()
-        
-        registrar = whois_data.registrar
-        if registrar:
-            features["registrar"] = registrar
-            
-            if any(sketchy.lower() in registrar.lower() for sketchy in SKETCHY_REGISTRARS):
-                risk_contribution += WHOIS_SKETCHY_REGISTRAR_POINTS
-        
-        whois_server = whois_data.whois_server
-        if whois_server and "privacy" in str(whois_server).lower():
-            features["whois_privacy"] = True
-            risk_contribution += WHOIS_PRIVACY_POINTS
-        
-        confidence = 0.8 if features["domain_age_days"] is not None else 0.3
-        
-        return ModuleResult(
-            module_name="whois_check",
-            features=features,
-            risk_contribution=risk_contribution,
-            confidence=confidence
-        )
-        
+        else:
+            logger.warning(f"WhoisFreaks returned status {res.status}")
+            return ModuleResult(
+                module_name="whois",
+                features={"error": f"HTTP {res.status}", "domain_age_days": None},
+                risk_contribution=0,
+                confidence=0.0
+            )
+    
     except Exception as e:
-        logger.error(f"WHOIS check error for {url}: {e}")
+        logger.error(f"WHOIS check error for {domain}: {e}")
         return ModuleResult(
-            module_name="whois_check",
-            features={"error": str(e)},
+            module_name="whois",
+            features={"error": str(e), "domain_age_days": None},
             risk_contribution=0,
-            confidence=0.0,
-            error=str(e)
+            confidence=0.0
         )
+
+def calculate_whois_risk(domain_age_days):
+    if domain_age_days is None:
+        return 0
+    elif domain_age_days < 7:
+        return 30
+    elif domain_age_days < 30:
+        return 20
+    elif domain_age_days < 365:
+        return 10
+    elif domain_age_days > 1095:
+        return -30
+    else:
+        return 0
