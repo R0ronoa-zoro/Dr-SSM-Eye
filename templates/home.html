@@ -102,7 +102,6 @@
         
         .btn-primary:hover {
             background: #5568d3;
-            transform: translateY(-2px);
         }
         
         .btn-secondary {
@@ -116,89 +115,165 @@
         
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 25px;
             margin-top: 20px;
         }
         
         .result-card {
             background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .result-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        }
-        
-        .screenshot {
-            width: 100%;
-            height: 150px;
-            background: #f0f0f0;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 3px solid #000;
         }
         
-        .screenshot img {
+        .screenshot-container {
+            width: 100%;
+            height: 250px;
+            background: #f0f0f0;
+            border-bottom: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        .screenshot-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .url-text {
+        .analyst-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 15px;
+            border-radius: 6px;
             font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .url-info {
+            margin-bottom: 20px;
+        }
+        
+        .url-row {
+            font-size: 12px;
+            margin: 5px 0;
+            font-family: monospace;
+        }
+        
+        .url-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .tag-clean { color: #28a745; font-weight: bold; }
+        .tag-suspicious { color: #ff9800; font-weight: bold; }
+        .tag-malicious { color: #dc3545; font-weight: bold; }
+        
+        .brand-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .brand-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .brand-item {
+            font-size: 12px;
+        }
+        
+        .brand-label {
+            font-weight: bold;
             color: #666;
-            word-break: break-all;
-            margin-bottom: 10px;
+        }
+        
+        .brand-value {
+            color: #333;
+            margin-top: 3px;
+        }
+        
+        .reason-box {
+            margin: 15px 0;
+            padding: 12px;
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            border-radius: 4px;
+        }
+        
+        .reason-label {
+            font-weight: bold;
+            font-size: 12px;
+            color: #0c5460;
+        }
+        
+        .reason-text {
+            font-size: 12px;
+            color: #0c5460;
+            margin-top: 5px;
         }
         
         .badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: bold;
-            margin: 5px 0;
+            margin: 10px 0;
         }
         
         .clean { background: #d4edda; color: #155724; }
         .suspicious { background: #fff3cd; color: #856404; }
         .malicious { background: #f8d7da; color: #721c24; }
         .analyst { background: #d1ecf1; color: #0c5460; }
-        .error { background: #f8d7da; color: #721c24; }
         
-        .score {
-            font-size: 14px;
-            margin: 8px 0;
-            color: #333;
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
         }
         
-        .details-btn {
-            width: 100%;
-            margin-top: 15px;
-            padding: 10px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .btn-action {
+            padding: 12px;
+            font-size: 13px;
+            text-align: center;
             text-decoration: none;
             display: block;
-            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
         }
         
-        .details-btn:hover {
-            background: #5568d3;
+        .btn-action:hover {
+            background: #667eea;
+            color: white;
         }
         
         .loading {
             text-align: center;
             padding: 40px;
-            color: #667eea;
         }
         
         .spinner {
@@ -214,6 +289,101 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1100px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .close {
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+        }
+        
+        .intel-section {
+            margin: 25px 0;
+        }
+        
+        .intel-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+        
+        .intel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .intel-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 13px;
+        }
+        
+        .intel-table td:first-child {
+            font-weight: 600;
+            width: 250px;
+            background: #f8f9fa;
         }
     </style>
 </head>
@@ -239,6 +409,18 @@
         </div>
         
         <div id="results"></div>
+    </div>
+    
+    <div id="intelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Brand Intelligence Report</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="intelContent"></div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -283,33 +465,224 @@
             let html = '<div class="results-grid">';
             
             results.forEach(result => {
-                const classification = result.classification || 'ERROR';
-                const confidence = result.confidence || 0;
-                const riskScore = result.risk_score || 0;
+                const classification = result.classification || 'UNKNOWN';
                 const url = result.url || result.normalized_url;
+                const normalizedUrl = result.normalized_url || url;
+                const confidence = ((result.confidence || 0) * 100).toFixed(1);
+                const riskScore = result.risk_score || 0;
                 const thumbnailPath = result.thumbnail_path || '';
+                const reasoning = result.reasoning || [];
+                
+                const firstReason = reasoning.length > 0 ? reasoning[0].description : 'Analysis complete';
+                
+                const tagClass = classification === 'CLEAN' ? 'tag-clean' : classification === 'SUSPICIOUS' ? 'tag-suspicious' : 'tag-malicious';
+                
+                const cardId = `card-${btoa(normalizedUrl).replace(/=/g, '')}`;
                 
                 html += `
-                    <div class="result-card">
-                        <div class="screenshot">
-                            ${thumbnailPath ? `<img src="/screenshot/${thumbnailPath}" alt="Screenshot">` : '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">No screenshot</div>'}
+                    <div class="result-card" id="${cardId}">
+                        <div class="screenshot-container">
+                            ${thumbnailPath ? `<img src="/screenshot/${thumbnailPath}" alt="Screenshot">` : 'No Screenshot'}
+                            ${classification === 'ANALYST_REQUIRED' ? '<div class="analyst-overlay">ANALYST</div>' : ''}
                         </div>
-                        <div class="url-text">${url}</div>
-                        <div class="badge ${classification.toLowerCase()}">${classification}</div>
-                        <div class="score">Score: ${riskScore}/200</div>
-                        <div class="score">Confidence: ${confidence.toFixed(1)}%</div>
-                        <a href="/details/${encodeURIComponent(url)}" class="details-btn">View Details</a>
+                        
+                        <div class="card-content">
+                            <div class="url-info">
+                                <div class="url-row"><span class="url-label">URL:</span> ${url}</div>
+                                <div class="url-row ip-row"><span class="url-label">IP:</span> Loading...</div>
+                                <div class="url-row"><span class="url-label">Tag:</span> <span class="${tagClass}">${classification}</span></div>
+                            </div>
+                            
+                            <div class="brand-section">
+                                <div class="brand-grid">
+                                    <div class="brand-item">
+                                        <div class="brand-label">Brand:</div>
+                                        <div class="brand-value brand-name">Detecting...</div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <div class="brand-label">Source:</div>
+                                        <div class="brand-value">Manual Scan</div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <div class="brand-label">Score:</div>
+                                        <div class="brand-value">${riskScore}, ${classification}</div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <div class="brand-label">Page Title:</div>
+                                        <div class="brand-value page-title">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="reason-box">
+                                <div class="reason-label">Reason:</div>
+                                <div class="reason-text">${firstReason}</div>
+                            </div>
+                            
+                            <div class="badge ${classification.toLowerCase()}">${classification}</div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="showBrandIntel('${encodeURIComponent(normalizedUrl)}')">Brand Intel</button>
+                                <button class="btn-action" onclick="alert('Takedown feature coming soon')">Takedown</button>
+                                <button class="btn-action" onclick="window.open('/details/${encodeURIComponent(normalizedUrl)}', '_blank')">Detailed View</button>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
             
             html += '</div>';
             container.innerHTML = html;
+            
+            results.forEach(result => {
+                const normalizedUrl = result.normalized_url || result.url;
+                const cardId = `card-${btoa(normalizedUrl).replace(/=/g, '')}`;
+                
+                fetch(`/api/brand-intel/${encodeURIComponent(normalizedUrl)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const card = document.getElementById(cardId);
+                        if (card) {
+                            const ipRow = card.querySelector('.ip-row');
+                            if (ipRow) {
+                                ipRow.innerHTML = `<span class="url-label">IP:</span> ${data.ip_address || 'N/A'}`;
+                            }
+                            
+                            const brandName = card.querySelector('.brand-name');
+                            if (brandName) {
+                                brandName.textContent = data.brand_detected || 'None';
+                            }
+                            
+                            const pageTitle = card.querySelector('.page-title');
+                            if (pageTitle) {
+                                const title = data.page_title || 'N/A';
+                                pageTitle.textContent = title.length > 30 ? title.substring(0, 30) + '...' : title;
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Brand intel fetch error:', err));
+            });
+        }
+        
+        function showBrandIntel(encodedUrl) {
+            fetch(`/api/brand-intel/${encodedUrl}`)
+            .then(res => res.json())
+            .then(data => {
+                displayBrandIntel(data);
+                document.getElementById('intelModal').style.display = 'block';
+            })
+            .catch(err => {
+                alert('Failed to load brand intelligence');
+            });
+        }
+        
+        function displayBrandIntel(data) {
+            const content = document.getElementById('intelContent');
+            
+            let html = `
+                <div class="intel-section">
+                    <h3>URL Information</h3>
+                    <table class="intel-table">
+                        <tr><td>Source URL</td><td>${data.source_url || 'N/A'}</td></tr>
+                        <tr><td>Destination URL</td><td>${data.dest_url || 'N/A'}</td></tr>
+                        <tr><td>Serving IP Address</td><td>${data.ip_address || 'N/A'}</td></tr>
+                        <tr><td>Status Code</td><td>${data.status_code || 'N/A'}</td></tr>
+                        <tr><td>Page Title</td><td>${data.page_title || 'N/A'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Brand Detection</h3>
+                    <table class="intel-table">
+                        <tr><td>Brand Detected</td><td>${data.brand_detected || 'None'}</td></tr>
+                        <tr><td>Official Domain</td><td>${data.is_official ? 'Yes' : 'No'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>IP Address & Autonomous System</h3>
+                    <table class="intel-table">
+                        <tr><td>IP Address</td><td>${data.ip_address || 'N/A'}</td></tr>
+                        <tr><td>Autonomous System</td><td>${data.asn || 'N/A'} (${data.asn_name || 'N/A'})</td></tr>
+                        <tr><td>Country</td><td>${data.country || 'N/A'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>SSL Certificate</h3>
+                    <table class="intel-table">
+                        <tr><td>Issuer</td><td>${data.ssl_issuer || 'N/A'}</td></tr>
+                        <tr><td>Valid From</td><td>${data.ssl_valid_from || 'N/A'}</td></tr>
+                        <tr><td>Valid To</td><td>${data.ssl_valid_to || 'N/A'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Domain Information</h3>
+                    <table class="intel-table">
+                        <tr><td>Domain Age</td><td>${data.domain_age || 'N/A'}</td></tr>
+                        <tr><td>Registrar</td><td>${data.registrar || 'N/A'}</td></tr>
+                        <tr><td>Registration Date</td><td>${data.registration_date || 'N/A'}</td></tr>
+                        <tr><td>Expiry Date</td><td>${data.expiry_date || 'N/A'}</td></tr>
+                        <tr><td>MX Records</td><td>${data.mx_records || 'N/A'}</td></tr>
+                        <tr><td>Nameservers</td><td>${data.nameservers || 'N/A'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Content Analysis</h3>
+                    <table class="intel-table">
+                        <tr><td>Has Password Field</td><td>${data.has_password_field ? 'Yes' : 'No'}</td></tr>
+                        <tr><td>Suspicious Keywords</td><td>${data.suspicious_keywords || 'None'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Redirect Analysis</h3>
+                    <table class="intel-table">
+                        <tr><td>Redirect Hops</td><td>${data.redirect_hops || 0}</td></tr>
+                        <tr><td>URL Shortener</td><td>${data.uses_shortener ? 'Yes' : 'No'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Threat Intelligence</h3>
+                    <table class="intel-table">
+                        <tr><td>In Threat Database</td><td>${data.in_threat_db ? 'Yes' : 'No'}</td></tr>
+                        <tr><td>Threat Sources</td><td>${data.threat_sources || 'None'}</td></tr>
+                        <tr><td>In Whitelist</td><td>${data.in_whitelist ? 'Yes' : 'No'}</td></tr>
+                        <tr><td>Tranco Rank</td><td>${data.tranco_rank || 'N/A'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="intel-section">
+                    <h3>Analysis Summary</h3>
+                    <table class="intel-table">
+                        <tr><td>Classification</td><td>${data.classification || 'N/A'}</td></tr>
+                        <tr><td>Risk Score</td><td>${data.risk_score || 0}/200</td></tr>
+                        <tr><td>Confidence</td><td>${data.confidence}%</td></tr>
+                        <tr><td>Requires Manual Review</td><td>${data.requires_manual ? 'Yes' : 'No'}</td></tr>
+                    </table>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+        
+        function closeModal() {
+            document.getElementById('intelModal').style.display = 'none';
         }
         
         function clearInput() {
             document.getElementById('urlInput').value = '';
             document.getElementById('results').innerHTML = '';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('intelModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
         }
     </script>
 </body>
